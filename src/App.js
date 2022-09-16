@@ -6,6 +6,7 @@ function App() {
   return (
     // <EuiProvider colorMode="light">
     <div className="App">
+      Index Page
       <Outlet />
     </div>
     // </EuiProvider>
