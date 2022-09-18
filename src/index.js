@@ -17,7 +17,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
-        <Route path="home" element={<Home />} />
+        <Route path="home/*" element={<Home />} />
         <Route path="add-trip" element={<AddTrip />} />
         <Route path="trips/:tripId" element={<TripDashboard />}>
           <Route path="calendar" element={<TripCalendar />} />

@@ -1,6 +1,5 @@
 import "./App.css";
 import { Outlet } from "react-router-dom";
-import { EuiProvider } from "@elastic/eui";
 
 function App() {
   return (
