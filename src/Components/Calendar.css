@@ -1,0 +1,36 @@
+.big-container {
+  height: 100vh;
+  width: 100vw;
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.cell {
+  background-color: aqua;
+  display: flex;
+  height: calc(50vh / 6);
+  width: calc(40vw / 7);
+  flex-grow: 1;
+  border: 2px solid blue;
+}
+.board-container {
+  height: 60vh;
+  width: 50vw;
+  background-color: blueviolet;
+  display: flex;
+  
+  
+}
+/* 
+.column-key-container {
+  display: flex;
+  flex-direction: row;
+} */
+
+.column {
+  display: flex;
+  flex-direction: column-reverse;
+  flex-grow: 1;
+}

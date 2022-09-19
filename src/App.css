@@ -11,3 +11,7 @@
 .App-link {
   color: #61dafb;
 }
+
+ol {
+list-style: none;
+}
