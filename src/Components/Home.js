@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 export default function Home() {
   const [trips, setTrips] = useState([]);
   const [user, setUser] = useState();
-  const [ids, setIDs] = useState();
   const navigate = useNavigate();
 
   const getInitialData = async () => {
@@ -39,19 +38,16 @@ export default function Home() {
 
   const handleDelete = async (index) => {
     console.log(index);
-    await axios.delete(`http://localhost:3000/trips/${index}`).then((res) => {
-      console.log(res);
-      console.log(res.data);
-      //const posts = this.state.posts.filter((item) => item.id !== id);
-      //this.setState({ posts });
-    });
+    await axios.delete(`http://localhost:3000/trips/${index}`);
 
-    return false;
-    const response = await axios.delete(`http://localhost:3000/trips/${index}`);
-    console.log(response);
-    if (response.data.message) {
-      setTrips(response.data.message);
-    }
+    navigate("/home");
+
+    // return false;
+    // const response = await axios.delete(`http://localhost:3000/trips/${index}`);
+    // console.log(response);
+    // if (response.data.message) {
+    //   setTrips(response.data.message);
+    // }
   };
 
   return (

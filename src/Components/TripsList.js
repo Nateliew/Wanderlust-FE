@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const TripsList = ({ trips, handleDelete, ids }) => {
+const TripsList = ({ trips, handleDelete }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="App">
       <div className="App-header">
@@ -22,13 +25,10 @@ const TripsList = ({ trips, handleDelete, ids }) => {
                   <br />
                 </div>
               </Link>
-              <button
-                onClick={(e) => handleDelete(trip.id)}
-                type="button"
-                onsubmit="return false"
-              >
+              <button onClick={(e) => handleDelete(trip.id)} type="button">
                 Delete
               </button>{" "}
+              <button onClick={(e) => navigate("/home")}>Click here</button>
             </div>
           ))}
       </div>

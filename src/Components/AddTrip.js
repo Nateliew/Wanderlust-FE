@@ -12,7 +12,6 @@ export default function AddTrip({ user }) {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState("");
   const [duration, setDuration] = useState(0);
-  const [currUser, setCurrUser] = useState();
 
   const handleChange = (event) => {
     switch (event.target.name) {
