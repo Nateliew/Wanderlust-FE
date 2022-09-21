@@ -13,6 +13,7 @@ import TripDashboard from "./Components/TripDashboard";
 import TripCalendar from "./Components/TripCalendar";
 import TripWishlist from "./Components/TripWishlist";
 import TripPack from "./Components/TripPack/AllPack";
+import PackList from "./Components/TripPack/Packlist";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -27,6 +28,7 @@ root.render(
           <Route path="calendar" element={<TripCalendar />} />
           <Route path="wishlist" element={<TripWishlist />} />
           <Route path="packinglist" element={<TripPack />} />
+          <Route path="packlist" element={<PackList />} />
         </Route>
 
         <Route path="*" element={"Nothing here!"} />

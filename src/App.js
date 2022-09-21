@@ -60,29 +60,29 @@ function App() {
           }}
           navbarOffsetBreakpoint="sm"
           asideOffsetBreakpoint="sm"
-          navbar={
-            <Navbar
-              p="md"
-              hiddenBreakpoint="sm"
-              hidden={!opened}
-              width={{ sm: 200, lg: 300 }}
-            >
-              <Text>Application navbar</Text>
-              <Title italic>Testing</Title>
-            </Navbar>
-          }
-          aside={
-            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-              <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-                <Text>Application sidebar</Text>
-              </Aside>
-            </MediaQuery>
-          }
-          footer={
-            <Footer height={60} p="md">
-              Application footer
-            </Footer>
-          }
+          // navbar={
+          //   <Navbar
+          //     p="md"
+          //     hiddenBreakpoint="sm"
+          //     hidden={!opened}
+          //     width={{ sm: 200, lg: 300 }}
+          //   >
+          //     <Text>Application navbar</Text>
+          //     <Title italic>Testing</Title>
+          //   </Navbar>
+          // }
+          // aside={
+          //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+          //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
+          //       <Text>Application sidebar</Text>
+          //     </Aside>
+          //   </MediaQuery>
+          // }
+          // footer={
+          //   <Footer height={60} p="md">
+          //     Application footer
+          //   </Footer>
+          // }
           header={
             <Header height={70} p="md">
               <div

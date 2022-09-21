@@ -3,49 +3,52 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import DragDropList from "./DragDrop";
+import FreshTrial from "./FreshTrial";
 
-import { Accordion, createStyles } from "@mantine/core";
+import { Accordion, createStyles, SimpleGrid } from "@mantine/core";
 
-// styling for accordion
-const useStyles = createStyles((theme) => ({
-  root: {
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[6]
-        : theme.colors.gray[0],
-    borderRadius: theme.radius.sm,
-  },
+import { dragDropStyles } from "./DragDropStyle";
 
-  item: {
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[6]
-        : theme.colors.gray[0],
-    border: "1px solid transparent",
-    position: "relative",
-    zIndex: 0,
-    transition: "transform 150ms ease",
+// // styling for accordion
+// const useStyles = createStyles((theme) => ({
+//   root: {
+//     backgroundColor:
+//       theme.colorScheme === "dark"
+//         ? theme.colors.dark[6]
+//         : theme.colors.gray[0],
+//     borderRadius: theme.radius.sm,
+//   },
 
-    "&[data-active]": {
-      // transform: "scale(1.03)",
-      backgroundColor:
-        theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
-      boxShadow: theme.shadows.md,
-      borderColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2],
-      borderRadius: theme.radius.md,
-      zIndex: 1,
-    },
-  },
+//   item: {
+//     backgroundColor:
+//       theme.colorScheme === "dark"
+//         ? theme.colors.dark[6]
+//         : theme.colors.gray[0],
+//     border: "1px solid transparent",
+//     position: "relative",
+//     zIndex: 0,
+//     transition: "transform 150ms ease",
 
-  chevron: {
-    "&[data-rotate]": {
-      transform: "rotate(-90deg)",
-    },
-  },
-}));
+//     "&[data-active]": {
+//       // transform: "scale(1.03)",
+//       backgroundColor:
+//         theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+//       boxShadow: theme.shadows.md,
+//       borderColor:
+//         theme.colorScheme === "dark"
+//           ? theme.colors.dark[4]
+//           : theme.colors.gray[2],
+//       borderRadius: theme.radius.md,
+//       zIndex: 1,
+//     },
+//   },
+
+//   chevron: {
+//     "&[data-rotate]": {
+//       transform: "rotate(-90deg)",
+//     },
+//   },
+// }));
 
 export default function TripPack(props) {
   // hardcoded mock data for set-up trial
@@ -54,10 +57,14 @@ export default function TripPack(props) {
   // for navigation
   let params = useParams();
 
+  // for styling accordion
+  const { classes } = dragDropStyles();
+
   // set state for packing list and items catalog
   const [packingList, setPackingList] = useState([]);
   const [itemsCatalog, setItemsCatalog] = useState([]);
   const [itemsCatalogByCat, setItemsCatalogByCat] = useState({});
+  const [accordionValue, setAccordionValue] = useState([]);
 
   const [selectedItems, setSelectedItems] = useState({});
 
@@ -121,36 +128,6 @@ export default function TripPack(props) {
     }
   };
 
-  // render items catalog by categories
-  const renderItemsCatalog = Object.entries(itemsCatalogByCat).map(
-    (data, index) => {
-      //data structure: [0:category,1:[{id, itemName},...]
-      const categoryName = data[0];
-
-      return (
-        <ul key={index}>
-          <h6>{categoryName}</h6>
-          {data[1].map((item, index) => (
-            <div
-              key={index}
-              style={{ display: "flex", flexDirection: "column" }}
-            >
-              <label htmlFor={item[Object.keys(item)]}>
-                <input
-                  type="checkbox"
-                  value={item[Object.keys(item)]}
-                  id={Object.keys(item)}
-                  onChange={(e) => handleSelectItem(e)}
-                />
-                {item[Object.keys(item)]}
-              </label>
-            </div>
-          ))}
-        </ul>
-      );
-    }
-  );
-
   const renderAccordionCatalog = Object.entries(itemsCatalogByCat).map(
     (data, index) => {
       //data structure: [0:category,1:[{id, itemName},...]
@@ -167,23 +144,14 @@ export default function TripPack(props) {
     }
   );
 
-  const renderPackingList = Object.entries(selectedItems).map((item, index) => (
-    <li key={index}>
-      {item[1]}
-      {console.log(item[1])}
-      {console.log(selectedItems)}
-    </li>
-  ));
-
-  const { classes } = useStyles();
-
   return (
     <div>
       <p>Packing List</p>
 
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", justifyContent: "space-around" }}>
         <div>
           <h3>Items Catalogue</h3>
+
           <Accordion
             sx={{ maxWidth: 420 }}
             mx="auto"
@@ -191,20 +159,20 @@ export default function TripPack(props) {
             classNames={classes}
             className={classes.root}
             defaultValue="customization"
+            multiple
+            value={accordionValue}
+            onChange={setAccordionValue}
           >
             {renderAccordionCatalog}
           </Accordion>
         </div>
+        <FreshTrial />
 
-        <div style={{ width: "20vw" }}></div>
-        <div>
-          <h3>Packing List</h3>
-          {selectedItems && Object.keys(selectedItems)
-            ? renderPackingList
-            : "No items added yet"}
-          <br />
-          <button>save changes</button>
-        </div>
+        {/* <SimpleGrid cols={3} spacing="xl">
+          <Bag type="Check-In" />
+          <Bag type="Carry-On" />
+          <Bag type="Tote" />
+        </SimpleGrid> */}
       </div>
     </div>
   );
