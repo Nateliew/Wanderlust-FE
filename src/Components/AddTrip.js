@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../constant";
 import axios from "axios";
 import "../App.css";
@@ -12,6 +12,7 @@ export default function AddTrip({ user }) {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState("");
   const [duration, setDuration] = useState(0);
+  const [allCountries, setAllCountries] = useState([]);
 
   const handleChange = (event) => {
     switch (event.target.name) {
@@ -24,9 +25,6 @@ export default function AddTrip({ user }) {
       case "endDate":
         setEndDate(event.target.value);
         break;
-      case "duration":
-        setDuration(event.target.value);
-        break;
       default:
     }
   };
@@ -34,13 +32,18 @@ export default function AddTrip({ user }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    var date1 = new Date(endDate);
+    var date2 = new Date(startDate);
+    var diff = date1.getDate() - date2.getDate();
+    console.log(diff);
+
     // Send request to create new listing in backend
-    axios
+    await axios
       .post(`${BACKEND_URL}/trips`, {
         country,
         startDate,
         endDate,
-        duration,
+        duration: diff,
         userId,
       })
       .then((res) => {
@@ -54,19 +57,33 @@ export default function AddTrip({ user }) {
       });
   };
 
+  //extract country options here
+  useEffect(() => {
+    axios.get("https://restcountries.com/v3.1/all").then((response) => {
+      setAllCountries(response.data);
+      console.log("country", response.data);
+    });
+    // Only run this effect on component mount
+  }, []);
+
   return (
     <div>
       <p>Add Trip</p>
       <form onSubmit={handleSubmit} className="form">
         <div>
           <label>Country</label>
-          <input
-            type="text"
+          <select
             name="country"
             value={country}
             onChange={handleChange}
             placeholder="Name of the Countries"
-          />
+          >
+            {allCountries.map((row, index) => (
+              <option key={index} value={row?.name?.common}>
+                {row?.name?.common}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label>Start date</label>
@@ -76,7 +93,7 @@ export default function AddTrip({ user }) {
             value={startDate}
             onChange={handleChange}
             placeholder="START"
-          />
+          ></input>
         </div>
         <div>
           <label>End date</label>
@@ -86,16 +103,6 @@ export default function AddTrip({ user }) {
             value={endDate}
             onChange={handleChange}
             placeholder="END"
-          />
-        </div>
-        <div>
-          <label>Duration</label>
-          <input
-            type="text"
-            name="duration"
-            value={duration}
-            onChange={handleChange}
-            placeholder="10"
           />
         </div>
         <button variant="primary" type="submit">

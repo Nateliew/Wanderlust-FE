@@ -7,7 +7,8 @@ import {
   Outlet,
 } from "react-router-dom";
 import axios from "axios";
-import { BACKEND_URL } from "../constant";
+// import Comments from "./Comments";
+// import { Routes, Route } from "react-router-dom";
 
 export default function TripDashboard() {
   // react routes
@@ -16,6 +17,7 @@ export default function TripDashboard() {
   const [trips, setTrips] = useState([]);
   const { tripId } = useParams();
 
+  console.log(params);
   const getSingle = async () => {
     let singleTrip = await axios.get(
       `${process.env.REACT_APP_API_SERVER}/trips`
@@ -28,26 +30,21 @@ export default function TripDashboard() {
   }, []);
 
   console.log(trips);
+  console.log(params);
 
   return (
     <div>
-      <p>Trip {Number(params.tripId) + 1} Dashboard</p>
-      <div
-        style={{
-          borderBottom: "solid 1px",
-          paddingBottom: "1rem",
-          display: "flex",
-          justifyContent: "space-around",
-          fontSize: "16px",
-        }}
+      <p>Trip {Number(params.tripId)} Dashboard</p>
+      <Link
+        style={{ display: "block", margin: "1rem 0" }}
+        to={`/trips/${tripId}/comments`}
+        key={tripId}
+        tripId={tripId}
       >
-        <Link to="calendar">Calendar | </Link>
-        <Link to="wishlist">Wishlist | </Link>
-        <Link to="packinglist">Packing List |</Link>
-        <a href="">Add friend</a>
-      </div>
+        Comments{" "}
+      </Link>
       {trips
-        .filter((trip) => Number(params.tripId) + 1 === Number(trip.id))
+        .filter((trip) => Number(params.tripId) === Number(trip.id))
         .map((trip) => {
           return (
             <div>

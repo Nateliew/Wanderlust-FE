@@ -5,16 +5,19 @@ import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 import TripsList from "./TripsList";
 import AddTrip from "./AddTrip";
-import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [trips, setTrips] = useState([]);
-  const [user, setUser] = useState();
-  const navigate = useNavigate();
+
+  //user is here
+  const userId = 1;
+
+  //match the user id with trip id in user_trip table
+  //get trip ID from user_trip table
 
   const getInitialData = async () => {
     let initialAPICall = await axios.get(
-      `${process.env.REACT_APP_API_SERVER}/trips`
+      `${process.env.REACT_APP_API_SERVER}/trips/user/${userId}`
     );
     setTrips(initialAPICall.data);
   };
@@ -23,44 +26,24 @@ export default function Home() {
     getInitialData();
   }, []);
 
-  const getUser = async () => {
-    let initialUser = await axios.get(
-      `${process.env.REACT_APP_API_SERVER}/users`
-    );
-    setUser(initialUser.data);
-  };
-
-  useEffect(() => {
-    getUser();
-  }, [trips]);
-
-  console.log(user);
-
   const handleDelete = async (index) => {
     console.log(index);
     await axios.delete(`http://localhost:3000/trips/${index}`);
-
-    navigate("/home");
-
-    // return false;
-    // const response = await axios.delete(`http://localhost:3000/trips/${index}`);
-    // console.log(response);
-    // if (response.data.message) {
-    //   setTrips(response.data.message);
-    // }
   };
+
+  console.log(trips);
 
   return (
     <div>
       <p>Home</p>
-      <Link to="/">
+      <Link to="/home">
         {<TripsList trips={trips} handleDelete={handleDelete} />}
       </Link>
       <Link to="/add-trip">
         <li>Add trip</li>
       </Link>
       <Routes>
-        <Route exact path="/add-trip" element={<AddTrip user={user} />}></Route>
+        <Route exact path="/add-trip" element={<AddTrip />}></Route>
       </Routes>
     </div>
   );
