@@ -1,24 +1,52 @@
-import React from "react";
-import { Link, useNavigate, Outlet } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+// import { BACKEND_URL } from "../constants";
+import axios from "axios";
+import { Routes, Route } from "react-router-dom";
+import TripsList from "./TripsList";
+import AddTrip from "./AddTrip";
 
 export default function Home() {
-  const navigate = useNavigate();
+  const [trips, setTrips] = useState([]);
+
+  //user is here
+  const userId = 1;
+
+  //match the user id with trip id in user_trip table
+  //get trip ID from user_trip table
+
+  const getInitialData = async () => {
+    let initialAPICall = await axios.get(
+      `${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`
+    );
+    setTrips(initialAPICall.data);
+  };
+
+  useEffect(() => {
+    getInitialData();
+  }, []);
+
+  const handleDelete = async (index) => {
+    console.log(index);
+    await axios.delete(
+      `${process.env.REACT_APP_API_SERVER}/trips/users/${index}`
+    );
+  };
+
+  console.log(trips);
 
   return (
     <div>
       <p>Home</p>
-      <ul>
-        <Link to="/trips/1">
-          <li>Trip 1</li>
-        </Link>
-        <Link to="/trips/2">
-          <li>Trip 2</li>
-        </Link>
-
-        <Link to="/add-trip">
-          <li>Add trip</li>
-        </Link>
-      </ul>
+      <Link to="/home">
+        {<TripsList trips={trips} handleDelete={handleDelete} />}
+      </Link>
+      <Link to="/add-trip">
+        <li>Add trip</li>
+      </Link>
+      <Routes>
+        <Route exact path="/add-trip" element={<AddTrip />}></Route>
+      </Routes>
     </div>
   );
 }

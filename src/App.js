@@ -1,10 +1,7 @@
 import "./App.css";
-
 import { useState } from "react";
-
 // for testing frontend
 import { Outlet, useNavigate } from "react-router-dom";
-
 // for styling
 import { bwaTheme } from "./Styling/Theme";
 import {
@@ -23,6 +20,7 @@ import {
   Title,
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons";
+import NavbarNested from "./Components/Navbars";
 
 function App() {
   const navigate = useNavigate();
@@ -61,17 +59,16 @@ function App() {
           }}
           navbarOffsetBreakpoint="sm"
           asideOffsetBreakpoint="sm"
-          // navbar={
-          //   <Navbar
-          //     p="md"
-          //     hiddenBreakpoint="sm"
-          //     hidden={!opened}
-          //     width={{ sm: 200, lg: 300 }}
-          //   >
-          //     <Text>Application navbar</Text>
-          //     <Title italic>Testing</Title>
-          //   </Navbar>
-          // }
+          navbar={
+            <Navbar
+              p="md"
+              hiddenBreakpoint="sm"
+              hidden={opened}
+              width={{ sm: 200, lg: 300 }}
+            >
+              <Text>Insert Here????</Text>
+            </Navbar>
+          }
           // aside={
           //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
           //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>

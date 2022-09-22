@@ -202,7 +202,7 @@ export default function TripPack(props) {
 
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/trips/2/packing-list`,
+          `${process.env.REACT_APP_API_SERVER}/trips/2/users/2/packing-list`,
           itemsList
         );
 
