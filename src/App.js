@@ -1,4 +1,5 @@
 import "./App.css";
+import { useState } from "react";
 
 import { useState } from "react";
 // for testing frontend
@@ -82,7 +83,6 @@ function App() {
           //     Application footer
           //   </Footer>
           // }
-
           header={
             <Header height={70} p="md">
               <div

@@ -29,7 +29,6 @@ root.render(
           <Route index element={<TripDashboard />} />
           <Route path="calendar" element={<TripCalendar />} />
           <Route path="wishlist" element={<TripWishlist />} />
-
           <Route path="comments" element={<Comments />} />
           <Route path="packinglist" element={<TripPack />} />
           {/* <Route path="packlist" element={<PackList />} /> */}
