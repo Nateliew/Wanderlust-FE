@@ -101,7 +101,7 @@ export default function TripPack(props) {
   const getTripItems = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/trips/${userId}/${tripId}/packing-list`
+        `${process.env.REACT_APP_BACKEND_URL}/trips/${tripId}/packing-list`
       );
       console.log(response.data);
       setUserItems(response.data);
