@@ -44,11 +44,11 @@ export default function TripPack(props) {
     },
     "check-in": {
       id: "check-in",
-      itemsUids: ["abc"],
+      itemsUids: [],
     },
     shared: {
       id: "shared",
-      itemsUids: ["abc"],
+      itemsUids: [],
     },
   });
 
