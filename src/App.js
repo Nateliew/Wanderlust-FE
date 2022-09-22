@@ -1,8 +1,6 @@
 import "./App.css";
-<<<<<<< HEAD
+
 import { Outlet } from "react-router-dom";
-// import { EuiProvider } from "@elastic/eui";
-=======
 import { useState } from "react";
 
 // for testing frontend
@@ -23,9 +21,9 @@ import {
   useMantineTheme,
   ActionIcon,
   ColorSchemeProvider,
+  Title,
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons";
->>>>>>> b15a9d97a4ed947cab447bc2c941b86efa24abf6
 
 function App() {
   const navigate = useNavigate();
@@ -38,14 +36,6 @@ function App() {
   };
 
   return (
-<<<<<<< HEAD
-    // <EuiProvider colorMode="light">
-    <div className="App">
-      <Outlet />
-     <h1>helo</h1>
-    </div>
-    // </EuiProvider>
-=======
     <ColorSchemeProvider
       colorScheme={colorScheme}
       toggleColorScheme={toggleColorScheme}
@@ -53,7 +43,13 @@ function App() {
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
-        theme={{ colorScheme }}
+        theme={{
+          colorScheme,
+          fontFamily: "Raleway, sans-serif",
+          headings: {
+            fontFamily: "Vollkorn, serif",
+          },
+        }}
       >
         <AppShell
           styles={{
@@ -66,28 +62,29 @@ function App() {
           }}
           navbarOffsetBreakpoint="sm"
           asideOffsetBreakpoint="sm"
-          navbar={
-            <Navbar
-              p="md"
-              hiddenBreakpoint="sm"
-              hidden={!opened}
-              width={{ sm: 200, lg: 300 }}
-            >
-              <Text>Application navbar</Text>
-            </Navbar>
-          }
-          aside={
-            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-              <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-                <Text>Application sidebar</Text>
-              </Aside>
-            </MediaQuery>
-          }
-          footer={
-            <Footer height={60} p="md">
-              Application footer
-            </Footer>
-          }
+          // navbar={
+          //   <Navbar
+          //     p="md"
+          //     hiddenBreakpoint="sm"
+          //     hidden={!opened}
+          //     width={{ sm: 200, lg: 300 }}
+          //   >
+          //     <Text>Application navbar</Text>
+          //     <Title italic>Testing</Title>
+          //   </Navbar>
+          // }
+          // aside={
+          //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+          //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
+          //       <Text>Application sidebar</Text>
+          //     </Aside>
+          //   </MediaQuery>
+          // }
+          // footer={
+          //   <Footer height={60} p="md">
+          //     Application footer
+          //   </Footer>
+          // }
           header={
             <Header height={70} p="md">
               <div
@@ -131,7 +128,6 @@ function App() {
         </AppShell>
       </MantineProvider>
     </ColorSchemeProvider>
->>>>>>> b15a9d97a4ed947cab447bc2c941b86efa24abf6
   );
 }
 

@@ -12,7 +12,8 @@ import TripMenu from "./Components/TripMenu";
 import TripDashboard from "./Components/TripDashboard";
 import TripCalendar from "./Components/TripCalendar";
 import TripWishlist from "./Components/TripWishlist";
-import PackingList from "./Components/PackingList";
+import TripPack from "./Components/TripPack/Packlist";
+// import PackList from "./Components/TripPack/Packlist";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -26,7 +27,8 @@ root.render(
           <Route index element={<TripDashboard />} />
           <Route path="calendar" element={<TripCalendar />} />
           <Route path="wishlist" element={<TripWishlist />} />
-          <Route path="packinglist" element={<PackingList />} />
+          <Route path="packinglist" element={<TripPack />} />
+          {/* <Route path="packlist" element={<PackList />} /> */}
         </Route>
 
         <Route path="*" element={"Nothing here!"} />
@@ -34,3 +36,4 @@ root.render(
     </Routes>
   </BrowserRouter>
 );
+
