@@ -20,12 +20,15 @@ import {
 import ItemsCatalog from "./ItemsCatalog";
 import DroppableColumn from "./DroppableColumn";
 
-export default function PackList(props) {
+export default function TripPack(props) {
   //for testing
   const userId = 2;
   const tripId = 2;
 
   const theme = useMantineTheme();
+
+  // LOAD USER ITEMS
+  const [userItems, setUserItems] = useState({});
 
   // FOR DRAG AND DROP INITIAL DATA
   const [allItems, setAllItems] = useState([]);
@@ -48,6 +51,7 @@ export default function PackList(props) {
       itemsUids: [],
     },
   });
+
   const [columnOrder, setColumnOrder] = useState(Object.keys(columns));
   // GET ITEMS CATALOG FROM BACKEND
   const [itemsCatalog, setItemsCatalog] = useState([]);
@@ -97,25 +101,10 @@ export default function PackList(props) {
   const getTripItems = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/trips/${tripId}/packing-list`
+        `${process.env.REACT_APP_BACKEND_URL}/trips/${userId}/${tripId}/packing-list`
       );
-
-      const itemsIds = [];
-      let itemsMap = {};
-      response.data.forEach((item) => {
-        itemsIds.push(item.id);
-        itemsMap[item.id] = {
-          id: item.id,
-          name: item.itemName,
-          uuid: uuidv4(),
-        };
-      });
-      setItemsColumn((prev) => {
-        let newItemsCol = { ...prev };
-        newItemsCol["itemsIds"] = itemsIds;
-        return newItemsCol;
-      });
-      setAllItems(itemsMap);
+      console.log(response.data);
+      setUserItems(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -124,6 +113,7 @@ export default function PackList(props) {
   useEffect(() => {
     getItemsCatalogByCat();
     getItemsCatalog();
+    getTripItems();
   }, []);
 
   const reorderColumnList = (sourceCol, startIndex, endIndex) => {
@@ -176,6 +166,9 @@ export default function PackList(props) {
         [newColumn.id]: newColumn,
       };
       setColumns(newState);
+
+      // SET PUT REQUEST HERE
+
       return;
     }
 
@@ -202,8 +195,10 @@ export default function PackList(props) {
         sharedItem: destination.droppableId === "shared" ? true : false,
         userId: userId,
         tripId: tripId,
-        sharedItems: false,
+        itemUid: newDraggableId,
+        columnIndex: destination.index,
       };
+      console.log(itemsList);
 
       try {
         const response = await axios.post(
@@ -216,8 +211,6 @@ export default function PackList(props) {
         console.log(error);
       }
     } else {
-      // PUT REQUEST
-
       selected = startItemsIds.splice(source.index, 1);
       console.log("1startitems", startItemsIds);
     }

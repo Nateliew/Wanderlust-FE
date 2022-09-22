@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-import DragDropList from "./DragDrop";
+import DragDropList from "../DragDrop";
 import FreshTrial from "./FreshTrial";
 
 import { Accordion, createStyles, SimpleGrid } from "@mantine/core";
 
-import { dragDropStyles } from "./DragDropStyle";
+import { dragDropStyles } from "../DragDropStyle";
 
 // // styling for accordion
 // const useStyles = createStyles((theme) => ({
@@ -70,15 +70,15 @@ export default function TripPack(props) {
 
   // load data from packinglist and items catalog
   const getPackingList = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/trips/${tripId}/packing-list`
-      );
-      setPackingList(response.data);
-      console.log("did this run?");
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const response = await axios.get(
+    //     `${process.env.REACT_APP_BACKEND_URL}/trips/${tripId}/packing-list`
+    //   );
+    //   setPackingList(response.data);
+    //   console.log("did this run?");
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const getItemsCatalogByCat = async () => {
