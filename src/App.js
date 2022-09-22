@@ -1,4 +1,5 @@
 import "./App.css";
+
 import { useState } from "react";
 // for testing frontend
 import { Outlet, useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ import {
   useMantineTheme,
   ActionIcon,
   ColorSchemeProvider,
+  Title,
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons";
 import NavbarNested from "./Components/Navbars";
@@ -39,7 +41,13 @@ function App() {
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
-        theme={{ colorScheme }}
+        theme={{
+          colorScheme,
+          fontFamily: "Raleway, sans-serif",
+          headings: {
+            fontFamily: "Vollkorn, serif",
+          },
+        }}
       >
         <AppShell
           styles={{
@@ -69,11 +77,12 @@ function App() {
           //     </Aside>
           //   </MediaQuery>
           // }
-          footer={
-            <Footer height={60} p="md">
-              Application footer
-            </Footer>
-          }
+          // footer={
+          //   <Footer height={60} p="md">
+          //     Application footer
+          //   </Footer>
+          // }
+
           header={
             <Header height={70} p="md">
               <div
