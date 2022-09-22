@@ -28,7 +28,7 @@ export default function Home() {
 
   const handleDelete = async (index) => {
     console.log(index);
-    await axios.delete(`http://localhost:3000/trips/${index}`);
+    await axios.delete(`${process.env.REACT_APP_API_SERVER}/trips/${index}`);
   };
 
   console.log(trips);
