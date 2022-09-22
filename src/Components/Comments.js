@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "../App.css";
 import axios from "axios";
 import { BACKEND_URL } from "../constant";
+import { CommentCard } from "./CommentCard";
 
 const Comments = () => {
   const [comments, setComments] = useState([]);
@@ -115,10 +116,18 @@ const Comments = () => {
                   </p>
                 </span>
               )} */}
-              <p>
+              {/* <p>
                 {comment.text} by user {comment.userId}
+              </p> */}
+              <p>
+                {
+                  <CommentCard
+                    comment={comment}
+                    deleteComment={deleteComment}
+                  />
+                }
               </p>
-              <button onClick={(e) => deleteComment(comment.id)}>Delete</button>
+              {/* <button onClick={(e) => deleteComment(comment.id)}>Delete</button> */}
             </div>
           );
         })}

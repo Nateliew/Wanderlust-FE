@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Single from "./Card";
 
 const TripsList = ({ trips, handleDelete }) => {
   return (
@@ -13,16 +14,11 @@ const TripsList = ({ trips, handleDelete }) => {
               to={`/trips/${trip.id}`}
               key={index}
             >
-              <div>
-                {trip.country}
-                <br />
-                {trip.startDate}
-                <br />
-              </div>
+              <div>{<Single trip={trip} />}</div>
             </Link>
-            <button onClick={(e) => handleDelete(trip.id)} type="button">
+            {/* <button onClick={(e) => handleDelete(trip.id)} type="button">
               Delete
-            </button>{" "}
+            </button>{" "} */}
           </div>
         ))}
     </div>

@@ -7,6 +7,8 @@ import {
   Outlet,
 } from "react-router-dom";
 import axios from "axios";
+import Sidebar from "./CommentSidebar";
+import PageTrip from "./Page";
 // import Comments from "./Comments";
 // import { Routes, Route } from "react-router-dom";
 
@@ -35,26 +37,29 @@ export default function TripDashboard() {
   return (
     <div>
       <p>Trip {Number(params.tripId)} Dashboard</p>
-      <Link
+      {/* <Link
         style={{ display: "block", margin: "1rem 0" }}
         to={`/trips/${tripId}/comments`}
         key={tripId}
         tripId={tripId}
       >
         Comments{" "}
-      </Link>
+      </Link> */}
       {trips
         .filter((trip) => Number(params.tripId) === Number(trip.id))
         .map((trip) => {
           return (
             <div>
-              <p>{trip.country}</p>
+              {/* <p>{trip.country}</p>
               <p>{trip.startDate}</p>
-              <p>{trip.duration}</p>
+              <p>{trip.duration}</p> */}
+              {<PageTrip trip={trip} />}
             </div>
           );
         })}
-      <button onClick={() => navigate("/home")}>Back to Home</button>
+      {/* <button onClick={() => navigate("/home")}>Back to Home</button> */}
+      <Sidebar />
+
       <Outlet />
     </div>
   );
