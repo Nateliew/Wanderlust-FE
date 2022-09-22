@@ -22,7 +22,7 @@ export default function TripDashboard() {
   console.log(params);
   const getSingle = async () => {
     let singleTrip = await axios.get(
-      `${process.env.REACT_APP_API_SERVER}/trips`
+      `${process.env.REACT_APP_API_SERVER}/trips/${params.tripId}`
     );
     setTrips(singleTrip.data);
   };
@@ -45,18 +45,18 @@ export default function TripDashboard() {
       >
         Comments{" "}
       </Link> */}
-      {trips
+      {/* {trips
         .filter((trip) => Number(params.tripId) === Number(trip.id))
         .map((trip) => {
-          return (
-            <div>
-              {/* <p>{trip.country}</p>
+          return ( */}
+      <div>
+        {/* <p>{trip.country}</p>
               <p>{trip.startDate}</p>
               <p>{trip.duration}</p> */}
-              {<PageTrip trip={trip} />}
-            </div>
-          );
-        })}
+        {<PageTrip trip={trips} />}
+      </div>
+      {/* );
+        })} */}
       {/* <button onClick={() => navigate("/home")}>Back to Home</button> */}
       <Sidebar />
 

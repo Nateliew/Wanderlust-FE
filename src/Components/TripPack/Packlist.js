@@ -44,11 +44,11 @@ export default function TripPack(props) {
     },
     "check-in": {
       id: "check-in",
-      itemsUids: [],
+      itemsUids: ["abc"],
     },
     shared: {
       id: "shared",
-      itemsUids: [],
+      itemsUids: ["abc"],
     },
   });
 
@@ -62,7 +62,7 @@ export default function TripPack(props) {
   const getItemsCatalogByCat = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/items-catalog/by-category`
+        `${process.env.REACT_APP_API_SERVER}/items-catalog/by-category`
       );
 
       setItemsCatalogByCat(response.data);
@@ -74,7 +74,7 @@ export default function TripPack(props) {
   const getItemsCatalog = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/items-catalog`
+        `${process.env.REACT_APP_API_SERVER}/items-catalog`
       );
 
       const itemsIds = [];
@@ -101,7 +101,7 @@ export default function TripPack(props) {
   const getTripItems = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/trips/${userId}/${tripId}/packing-list`
+        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/users/${userId}/packing-list`
       );
       console.log(response.data);
       setUserItems(response.data);
@@ -202,7 +202,7 @@ export default function TripPack(props) {
 
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/trips/2/packing-list`,
+          `${process.env.REACT_APP_API_SERVER}/trips/2/users/2/packing-list`,
           itemsList
         );
 

@@ -1,7 +1,5 @@
 import "./App.css";
 import { useState } from "react";
-
-import { useState } from "react";
 // for testing frontend
 import { Outlet, useNavigate } from "react-router-dom";
 // for styling

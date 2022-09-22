@@ -29,8 +29,8 @@ export default function TripMenu() {
         <Link to="wishlist">Wishlist </Link> */}
         <Link to="packinglist">Packing List</Link>
 
-        <a href="#/">Add friend</a>
-        <a href="#/">Discussion</a>
+        <Link to="/#">Add friend</Link>
+        <Link to="/#">Discussion</Link>
         <button onClick={() => navigate("/home")}>Back to Home</button>
       </div>
       {/* <Sidebar /> */}

@@ -8,7 +8,7 @@ const TripsList = ({ trips, handleDelete }) => {
       {trips
         // .filter((trip) => trip.userId === user.id)
         .map((trip, index) => (
-          <div className="container">
+          <div key={index} className="container">
             <Link
               style={{ display: "block", margin: "1rem 0" }}
               to={`/trips/${trip.id}`}

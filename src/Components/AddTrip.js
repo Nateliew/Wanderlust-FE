@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BACKEND_URL } from "../constant";
 import axios from "axios";
 import "../App.css";
 // import { button } from "@elastic/eui";
@@ -39,7 +38,7 @@ export default function AddTrip({ user }) {
 
     // Send request to create new listing in backend
     await axios
-      .post(`${BACKEND_URL}/trips`, {
+      .post(`${process.env.REACT_APP_API_SERVER}/trips`, {
         country,
         startDate,
         endDate,
