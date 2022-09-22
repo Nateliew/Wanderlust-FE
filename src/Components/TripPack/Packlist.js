@@ -62,7 +62,7 @@ export default function TripPack(props) {
   const getItemsCatalogByCat = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/items-catalog/by-category`
+        `${process.env.REACT_APP_API_SERVER}/items-catalog/by-category`
       );
 
       setItemsCatalogByCat(response.data);
@@ -74,7 +74,7 @@ export default function TripPack(props) {
   const getItemsCatalog = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/items-catalog`
+        `${process.env.REACT_APP_API_SERVER}/items-catalog`
       );
 
       const itemsIds = [];
