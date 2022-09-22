@@ -12,7 +12,7 @@ import TripMenu from "./Components/TripMenu";
 import TripDashboard from "./Components/TripDashboard";
 import TripCalendar from "./Components/TripCalendar";
 import TripWishlist from "./Components/TripWishlist";
-import PackingList from "./Components/PackingList";
+// import PackingList from "./Components/PackingList";
 import Comments from "./Components/Comments";
 import TripPack from "./Components/TripPack/Packlist";
 // import PackList from "./Components/TripPack/Packlist";
