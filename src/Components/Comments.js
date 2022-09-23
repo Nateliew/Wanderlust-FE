@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../App.css";
 import axios from "axios";
-import { BACKEND_URL } from "../constant";
 import { CommentCard } from "./CommentCard";
+import { TextInput, Button } from "@mantine/core";
 
 const Comments = () => {
   const [comments, setComments] = useState([]);
@@ -16,7 +16,7 @@ const Comments = () => {
 
   const getComments = async () => {
     let initialComments = await axios.get(
-      `${BACKEND_URL}/trips/${tripId}/comments`
+      `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/comments`
     );
     setComments(initialComments.data);
   };
@@ -54,7 +54,7 @@ const Comments = () => {
     event.preventDefault();
     // Send request to create new comment in backend
     await axios
-      .post(`${BACKEND_URL}/trips/${tripId}/comments`, {
+      .post(`${process.env.REACT_APP_API_SERVER}/trips/${tripId}/comments`, {
         content: commentContent,
         trip_id,
         user_id,
@@ -89,60 +89,38 @@ const Comments = () => {
 
   const deleteComment = async (id) => {
     console.log(id);
-    await axios.delete(`${BACKEND_URL}/trips/${tripId}/comments/`, {
-      data: { commentId: id },
-    });
+    await axios.delete(
+      `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/comments/`,
+      {
+        data: { commentId: id },
+      }
+    );
   };
 
   return (
     <div className="App">
       {comments
         // .filter((comment) => comment.tripId === tripId)
-        .map((comment) => {
+        .map((comment, index) => {
           return (
-            <div>
-              {/* {isEditing ? (
-                <input
-                  autoFocus
-                  value={commentContent}
-                  onChange={handleChange}
-                  onKeyPress={handleKeyPress}
-                  type="text"
-                />
-              ) : (
-                <span onClick={handleClick}>
-                  <p>
-                    {comment.text} by user {comment.userId}
-                  </p>
-                </span>
-              )} */}
-              {/* <p>
-                {comment.text} by user {comment.userId}
-              </p> */}
-              <p>
-                {
-                  <CommentCard
-                    comment={comment}
-                    deleteComment={deleteComment}
-                  />
-                }
-              </p>
-              {/* <button onClick={(e) => deleteComment(comment.id)}>Delete</button> */}
+            <div key={index}>
+              {<CommentCard comment={comment} deleteComment={deleteComment} />}
             </div>
           );
         })}
+      <br />
       <label>Comments</label>
       <form onSubmit={handleSubmit}>
-        <input
+        <TextInput
           // Use textarea to give user more space to type
           as="textarea"
           name="content"
           value={commentContent}
           onChange={handleChange}
         />
-        <button variant="primary" type="submit">
+        <Button variant="secondary" type="submit">
           Submit
-        </button>
+        </Button>
       </form>
     </div>
   );

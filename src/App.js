@@ -1,6 +1,5 @@
 import "./App.css";
 import { useState } from "react";
-
 // for testing frontend
 import { Outlet, useNavigate } from "react-router-dom";
 // for styling
@@ -22,6 +21,7 @@ import {
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons";
 import NavbarNested from "./Components/Navbars";
+import NavbarSimpleColored from "./Components/HomeNavbar";
 
 function App() {
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ function App() {
               hidden={opened}
               width={{ sm: 200, lg: 300 }}
             >
-              <Text>Insert Here????</Text>
+              {/* {opened ? <NavbarSimpleColored /> : null} */}
             </Navbar>
           }
           // aside={
@@ -91,9 +91,9 @@ function App() {
                   height: "100%",
                 }}
               >
-                <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+                <MediaQuery styles={{ display: "none" }}>
                   <Burger
-                    opened={opened}
+                    opened={!opened}
                     onClick={() => setOpened((o) => !o)}
                     size="sm"
                     color={theme.colors.gray[6]}

@@ -70,8 +70,8 @@ const UseStyles = createStyles((theme) => ({
 export default function PageTrip({ trip }) {
   const { classes } = UseStyles();
   var moment = require("moment");
-  var date1 = moment(trip.startDate).format("DD/MM/YYYY");
-  var date2 = moment(trip.endDate).format("DD/MM/YYYY");
+  var date1 = moment(trip.startDate).format("MMM Do YY");
+  var date2 = moment(trip.endDate).format("MMM Do YY");
 
   return (
     <div>

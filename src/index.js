@@ -22,9 +22,9 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route index element={<Landing />} />
-      <Route path="/*" element={<App />}>
+      <Route path="/" element={<App />}>
         <Route path="add-trip" element={<AddTrip />} />
-        <Route path="home" element={<Home />} />
+        <Route path="home/*" element={<Home />} />
         <Route path="trips/:tripId" element={<TripMenu />}>
           <Route index element={<TripDashboard />} />
           <Route path="calendar" element={<TripCalendar />} />
