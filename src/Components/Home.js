@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-// import { BACKEND_URL } from "../constants";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 import TripsList from "./TripsList";
 import AddTrip from "./AddTrip";
+import { withAuthenticationRequired, useAuth0 } from "@auth0/auth0-react";
 
 export default function Home() {
   const [trips, setTrips] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
+
+  const {
+    loginWithRedirect,
+    user,
+    isAuthenticated,
+    getAccessTokenSilently,
+    logout,
+  } = useAuth0();
 
   //user is here
   const userId = 1;
@@ -16,10 +25,30 @@ export default function Home() {
   //get trip ID from user_trip table
 
   const getInitialData = async () => {
-    let initialAPICall = await axios.get(
-      `${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`
-    );
-    setTrips(initialAPICall.data);
+    console.log("user", user);
+    console.log("did this run??");
+    if (isAuthenticated) {
+      setUserInfo(user);
+
+      const accessToken = await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUDIENCE,
+        scope: process.env.REACT_APP_SCOPE,
+      });
+
+      axios
+        .get(`${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+
+        .then((response) => {
+          setTrips(response.data);
+        });
+    } else {
+      console.log("user:", user);
+      console.log("ORRRRR did this run??");
+      loginWithRedirect();
+      // post to backend /users to store the user info
+    }
   };
 
   useEffect(() => {
@@ -50,3 +79,5 @@ export default function Home() {
     </div>
   );
 }
+
+// export default withAuthenticationRequired(Home);

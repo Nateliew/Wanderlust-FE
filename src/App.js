@@ -59,16 +59,16 @@ function App() {
           }}
           navbarOffsetBreakpoint="sm"
           asideOffsetBreakpoint="sm"
-          navbar={
-            <Navbar
-              p="md"
-              hiddenBreakpoint="sm"
-              hidden={opened}
-              width={{ sm: 200, lg: 300 }}
-            >
-              <Text>Insert Here????</Text>
-            </Navbar>
-          }
+          // navbar={
+          //   <Navbar
+          //     p="md"
+          //     hiddenBreakpoint="sm"
+          //     hidden={opened}
+          //     width={{ sm: 200, lg: 300 }}
+          //   >
+          //     <Text>Insert Here????</Text>
+          //   </Navbar>
+          // }
           // aside={
           //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
           //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>

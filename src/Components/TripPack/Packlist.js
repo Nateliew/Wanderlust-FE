@@ -29,12 +29,19 @@ export default function TripPack(props) {
 
   // LOAD USER ITEMS
   const [userItems, setUserItems] = useState({});
+  const [sharedTripItems, setSharedTripItems] = useState({});
 
   // FOR DRAG AND DROP INITIAL DATA
   const [allItems, setAllItems] = useState([]);
   const [itemsColumn, setItemsColumn] = useState({
     id: "items-catalog",
     itemsIds: [],
+  });
+  const [sharedItemsColumn, setSharedItemsColumn] = useState({
+    shared: {
+      id: "shared",
+      itemsUids: ["def"],
+    },
   });
 
   const [columns, setColumns] = useState({
@@ -46,10 +53,6 @@ export default function TripPack(props) {
       id: "check-in",
       itemsUids: [],
     },
-    shared: {
-      id: "shared",
-      itemsUids: [],
-    },
   });
 
   const [columnOrder, setColumnOrder] = useState(Object.keys(columns));
@@ -57,7 +60,7 @@ export default function TripPack(props) {
   const [itemsCatalog, setItemsCatalog] = useState([]);
   const [itemsCatalogByCat, setItemsCatalogByCat] = useState({});
   const [bagType, setBagType] = useState("");
-  const [selectedItems, setSelectedItems] = useState({ abc: 1 });
+  const [selectedItems, setSelectedItems] = useState({ abc: 1 }, { def: 7 });
 
   const getItemsCatalogByCat = async () => {
     try {
@@ -98,10 +101,22 @@ export default function TripPack(props) {
     }
   };
 
-  const getTripItems = async () => {
+  const getUserTripItems = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/users/${userId}/packing-list`
+        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/users/${userId}`
+      );
+      console.log(response.data);
+      setUserItems(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSharedTripItems = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/shared`
       );
       console.log(response.data);
       setUserItems(response.data);
@@ -113,7 +128,8 @@ export default function TripPack(props) {
   useEffect(() => {
     getItemsCatalogByCat();
     getItemsCatalog();
-    getTripItems();
+    getUserTripItems();
+    getSharedTripItems();
   }, []);
 
   const reorderColumnList = (sourceCol, startIndex, endIndex) => {
@@ -244,7 +260,7 @@ export default function TripPack(props) {
     } else {
       setColumns((prev) => ({
         ...prev,
-        bagType: { id: setBagType, itemsIds: [] },
+        bagType: { id: bagType, itemsUids: [] },
       }));
       setColumnOrder(Object.keys(columns));
     }
@@ -263,7 +279,7 @@ export default function TripPack(props) {
         }}
       >
         <Grid.Col
-          sm={4}
+          sm={2}
           sx={{
             backgroundColor: theme.colors.red[3],
           }}
@@ -302,6 +318,21 @@ export default function TripPack(props) {
               );
             })}
           </SimpleGrid>
+        </Grid.Col>
+        <Grid.Col
+          sm={2}
+          sx={{
+            backgroundColor: theme.colors.red[3],
+          }}
+        >
+          <Title italic>Shared</Title>
+          <DroppableColumn
+            column={sharedItemsColumn.shared}
+            allItems={allItems}
+            // selectedItemsIds={sharedItemsColumn.shared.itemsUids}
+            // dragIds={selectedItems}
+            handleDeleteItem={handleDeleteItem}
+          />
         </Grid.Col>
       </Grid>
     </DragDropContext>
