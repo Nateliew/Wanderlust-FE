@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
@@ -25,6 +26,17 @@ export default function TripPack(props) {
   const userId = 2;
   const tripId = 2;
 
+  //for AUTHENTICATION
+  const {
+    loginWithRedirect,
+    user,
+    isAuthenticated,
+    getAccessTokenSilently,
+    logout,
+  } = useAuth0();
+
+  const [userInfo, setUserInfo] = useState({});
+
   const theme = useMantineTheme();
 
   // LOAD USER ITEMS
@@ -33,10 +45,7 @@ export default function TripPack(props) {
 
   // FOR DRAG AND DROP INITIAL DATA
   const [allItems, setAllItems] = useState([]);
-  const [itemsColumn, setItemsColumn] = useState({
-    id: "items-catalog",
-    itemsIds: [],
-  });
+  const [itemsColumn, setItemsColumn] = useState({});
   const [sharedItemsColumn, setSharedItemsColumn] = useState({
     shared: {
       id: "shared",
@@ -44,10 +53,12 @@ export default function TripPack(props) {
     },
   });
 
+  // const [columns, setColumns] = useState({})
+
   const [columns, setColumns] = useState({
     "carry-on": {
       id: "carry-on",
-      itemsUids: ["abc"],
+      itemsUids: [{ abc: 1 }],
     },
     "check-in": {
       id: "check-in",
@@ -62,74 +73,44 @@ export default function TripPack(props) {
   const [bagType, setBagType] = useState("");
   const [selectedItems, setSelectedItems] = useState({ abc: 1 }, { def: 7 });
 
-  const getItemsCatalogByCat = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/items-catalog/by-category`
-      );
+  const getInitialDataApi = async () => {
+    if (isAuthenticated) {
+      console.log("testing1234");
+      setUserInfo(user);
 
-      setItemsCatalogByCat(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getItemsCatalog = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/items-catalog`
-      );
-
-      const itemsIds = [];
-      let itemsMap = {};
-      response.data.forEach((item) => {
-        itemsIds.push(item.id);
-        itemsMap[item.id] = {
-          id: item.id,
-          name: item.itemName,
-          uuid: uuidv4(),
-        };
+      const accessToken = await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUDIENCE,
+        scope: process.env.REACT_APP_SCOPE,
       });
-      setItemsColumn((prev) => {
-        let newItemsCol = { ...prev };
-        newItemsCol["itemsIds"] = itemsIds;
-        return newItemsCol;
-      });
-      setAllItems(itemsMap);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const getUserTripItems = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/users/${userId}`
+      // get all items in template list
+      const itemsResponse = await axios.get(
+        `${process.env.REACT_APP_API_SERVER}/items-catalog`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
       );
-      console.log(response.data);
-      setUserItems(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+      console.log(itemsResponse.data);
+      setAllItems(itemsResponse.data.itemsMap);
+      setItemsCatalogByCat(itemsResponse.data.itemByCategory);
+      setItemsColumn(itemsResponse.data.itemsColumn);
 
-  const getSharedTripItems = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/shared`
+      const userItemsResponse = await axios.get(
+        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/users/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
       );
-      console.log(response.data);
-      setUserItems(response.data);
-    } catch (error) {
-      console.log(error);
+      console.log("useritems:", userItemsResponse.data);
+      // setSharedItemsColumn(userItemsResponse.data.sharedColumn);
+      // setColumns(userItemsResponse.data.column);
+    } else {
+      loginWithRedirect();
     }
   };
 
   useEffect(() => {
-    getItemsCatalogByCat();
-    getItemsCatalog();
-    getUserTripItems();
-    getSharedTripItems();
+    getInitialDataApi();
   }, []);
 
   const reorderColumnList = (sourceCol, startIndex, endIndex) => {
@@ -218,7 +199,7 @@ export default function TripPack(props) {
 
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_SERVER}/trips/2/users/2/packing-list`,
+          `${process.env.REACT_APP_API_SERVER}/trips/2/packing-list/users/2`,
           itemsList
         );
 
@@ -303,7 +284,7 @@ export default function TripPack(props) {
           <SimpleGrid cols={columnOrder.length}>
             {columnOrder.map((columnId, index) => {
               const column = columns[columnId];
-              const dragIds = selectedItems;
+              // const dragIds = selectedItems;
               const selectedItemsIds = column.itemsUids;
 
               return (
@@ -312,7 +293,7 @@ export default function TripPack(props) {
                   column={column}
                   allItems={allItems}
                   selectedItemsIds={selectedItemsIds}
-                  dragIds={dragIds}
+                  // dragIds={dragIds}
                   handleDeleteItem={handleDeleteItem}
                 />
               );

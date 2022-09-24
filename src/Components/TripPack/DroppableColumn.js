@@ -41,8 +41,12 @@ export default function DroppableColumn({
             {selectedItemsIds &&
             selectedItemsIds.length &&
             Object.keys(allItems).length
-              ? selectedItemsIds.map((itemUid, index) => (
-                  <Draggable key={itemUid} draggableId={itemUid} index={index}>
+              ? selectedItemsIds.map((item, index) => (
+                  <Draggable
+                    key={Object.keys(item)[0]}
+                    draggableId={Object.keys(item)[0]}
+                    index={index}
+                  >
                     {(draggableProvided, draggableSnapshot) => (
                       <div
                         className={cx(classes.packItem, {
@@ -53,7 +57,10 @@ export default function DroppableColumn({
                         ref={draggableProvided.innerRef}
                       >
                         <div>
-                          <Text>{allItems[dragIds[itemUid]]["name"]}</Text>
+                          {console.log("item", item)}
+                          {console.log("itemId", item[Object.keys(item)[0]])}
+                          {console.log("dragId", Object.keys(item)[0])}
+                          <Text>{allItems[1]["itemName"]}</Text>
                           <NumberInput defaultValue={1} />
                           <Button onClick={() => handleDeleteItem()}></Button>
                         </div>
