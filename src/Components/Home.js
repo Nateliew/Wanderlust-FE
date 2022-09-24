@@ -1,59 +1,85 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 import TripsList from "./TripsList";
 import AddTrip from "./AddTrip";
 import { withAuthenticationRequired, useAuth0 } from "@auth0/auth0-react";
+import { UserContext } from "../App";
 
-export default function Home() {
+function Home() {
   const [trips, setTrips] = useState([]);
-  const [userInfo, setUserInfo] = useState({});
+  const [userEmail, setUserEmail] = useState({});
+  const [userName, setUserName] = useState({});
+  const userId = useContext(UserContext);
 
-  const {
-    loginWithRedirect,
-    user,
-    isAuthenticated,
-    getAccessTokenSilently,
-    logout,
-  } = useAuth0();
+  // const { user } = useAuth0();
 
   //user is here
-  const userId = 1;
+  // const userId = 1;
 
   //match the user id with trip id in user_trip table
   //get trip ID from user_trip table
 
+  // upon login, we should check if the user exists in users model
+  // findORcreate user's info
+
+  // if user exists, then we show the list of trips
+
+  // if user does not exist in model, we create userinfo and no trips data
+
+  // const getUserInfo = async () => {
+  //   setUserEmail(user.email);
+  //   setUserName(user.nickname);
+
+  //   const userInfo = await axios.post(
+  //     `${process.env.REACT_APP_API_SERVER}/users`,
+  //     {
+  //       name: user.nickname,
+  //       email: user.email,
+  //     }
+  //   );
+
+  //   return userInfo.data.id;
+  // };
+
   const getInitialData = async () => {
-    console.log("user", user);
-    console.log("did this run??");
-    if (isAuthenticated) {
-      setUserInfo(user);
-
-      const accessToken = await getAccessTokenSilently({
-        audience: process.env.REACT_APP_AUDIENCE,
-        scope: process.env.REACT_APP_SCOPE,
+    axios
+      .get(`${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`)
+      .then((response) => {
+        console.log("response", response);
+        setTrips(response.data);
       });
-
-      axios
-        .get(`${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
-
-        .then((response) => {
-          setTrips(response.data);
-        });
-    } else {
-      console.log("user:", user);
-      console.log("ORRRRR did this run??");
-      loginWithRedirect();
-      // post to backend /users to store the user info
-    }
   };
 
+  //ORIGINAL CODE WITH AUTHENTICATION ETC
+  // const getInitialData = async () => {
+  //   console.log("user", user);
+  //   console.log("did this run??");
+
+  //   const userId = getUserInfo();
+
+  //   setUserEmail(user.email);
+  //   setUserName(user.nickname);
+
+  //   axios
+  //     .post(`${process.env.REACT_APP_API_SERVER}/users`, {
+  //       name: user.nickname,
+  //       email: user.email,
+  //     })
+  //     .then((response) => response.data[0].id)
+  //     .then((res) =>
+  //       axios.get(`${process.env.REACT_APP_API_SERVER}/trips/users/${res}`)
+  //     )
+  //     .then((response) => {
+  //       setTrips(response.data);
+  //     });
+  // };
+
   useEffect(() => {
+    console.log("userIDDDDDD:", userId);
     getInitialData();
-  }, []);
+  }, [userId]);
 
   const handleDelete = async (index) => {
     console.log(index);
@@ -80,4 +106,4 @@ export default function Home() {
   );
 }
 
-// export default withAuthenticationRequired(Home);
+export default Home;
