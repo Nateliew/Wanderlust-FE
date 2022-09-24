@@ -20,8 +20,7 @@ import {
   Title,
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons";
-import NavbarNested from "./Components/Navbars";
-import NavbarSimpleColored from "./Components/HomeNavbar";
+import LogoutButton from "./Components/Logout";
 
 function App() {
   const navigate = useNavigate();
@@ -58,18 +57,18 @@ function App() {
                   : theme.colors.dark[8],
             },
           }}
-          navbarOffsetBreakpoint="sm"
-          asideOffsetBreakpoint="sm"
-          navbar={
-            <Navbar
-              p="md"
-              hiddenBreakpoint="sm"
-              hidden={opened}
-              width={{ sm: 200, lg: 300 }}
-            >
-              {/* {opened ? <NavbarSimpleColored /> : null} */}
-            </Navbar>
-          }
+          // navbarOffsetBreakpoint="sm"
+          // asideOffsetBreakpoint="sm"
+          // navbar={
+          //   <Navbar
+          //     p="md"
+          //     hiddenBreakpoint="sm"
+          //     hidden={opened}
+          //     width={{ sm: 200, lg: 300 }}
+          //   >
+          //     {/* {opened ? <NavbarSimpleColored /> : null} */}
+          //   </Navbar>
+          // }
           // aside={
           //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
           //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>

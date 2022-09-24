@@ -64,3 +64,67 @@
   <Link to="packinglist">Packing List |</Link>
   <a href="">Add friend</a>
 </div>;
+
+const getInitialData = async () => {
+  console.log("user", user);
+  console.log("did this run??");
+  if (isAuthenticated) {
+    if (userExist.includes(user.name.trim())) {
+      console.log("already existed");
+      console.log(userExist);
+      setUserInfo(user);
+
+      const accessToken = await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUDIENCE,
+        scope: process.env.REACT_APP_SCOPE,
+      });
+
+      axios
+        .get(`${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+
+        .then((response) => {
+          setTrips(response.data);
+        });
+    } else {
+      console.log("user:", user);
+      console.log("doesnt exist");
+      console.log(userExist);
+      console.log("nickname:", user.nickname);
+
+      const accessToken = await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUDIENCE,
+        scope: process.env.REACT_APP_SCOPE,
+      });
+      axios
+        .post(
+          `${process.env.REACT_APP_API_SERVER}/users`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          },
+          {
+            // Sending HTTP POST request
+            firstName: user.nickname,
+            lastName: user.nickname,
+            email: user.email,
+          }
+        )
+        .then((res) => {
+          console.log("User has been posted");
+        });
+      axios
+        .get(`${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+
+        .then((response) => {
+          setTrips(response.data);
+        });
+      // post to backend /users to store the user info
+    }
+  } else {
+    console.log("REDIRECT");
+    loginWithRedirect();
+  }
+};
