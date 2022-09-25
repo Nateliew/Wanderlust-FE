@@ -7,9 +7,7 @@ import { dragDropStyles } from "./DragDropStyle";
 // e.g. column: "column-1", data : {id: "passport"}
 export default function ItemsCatalog({ column, itemsByCategory }) {
   const { classes, cx } = dragDropStyles();
-  const [accordionValue, setAccordionValue] = useState(
-    Object.keys(itemsByCategory)
-  );
+  const [accordionValue, setAccordionValue] = useState([]);
 
   const renderAccordionCatalog = Object.entries(itemsByCategory).map(
     (data, index) => {
@@ -63,7 +61,6 @@ export default function ItemsCatalog({ column, itemsByCategory }) {
 
   return (
     <>
-      <TextInput placeholder="Search the catalogue" />
       <Accordion
         sx={{ maxWidth: 420 }}
         mx="auto"
