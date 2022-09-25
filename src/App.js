@@ -31,7 +31,6 @@ import { IconSun, IconMoonStars } from "@tabler/icons";
 import LogoutButton from "./Components/Logout";
 import NavbarMinimal from "../src/Components/Navbars";
 
-export const UserContext = createContext();
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -47,6 +46,8 @@ const useStyles = createStyles((theme) => ({
     height: "100%",
   },
 }));
+
+export const UserContext = createContext();
 
 function App() {
   const navigate = useNavigate();

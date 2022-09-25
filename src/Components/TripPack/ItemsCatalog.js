@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, Accordion } from "@mantine/core";
+import { Text, Accordion, TextInput } from "@mantine/core";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 import { dragDropStyles } from "./DragDropStyle";
@@ -24,11 +24,6 @@ export default function ItemsCatalog({ column, itemsByCategory }) {
                 <div
                   ref={droppableProvided.innerRef}
                   {...droppableProvided.droppableProps}
-                  sx={{
-                    backgroundColor: droppableSnapshot.isDraggingOver
-                      ? "lightgrey"
-                      : "transparent",
-                  }}
                 >
                   {items.map((item, index) => (
                     <Draggable
@@ -46,14 +41,8 @@ export default function ItemsCatalog({ column, itemsByCategory }) {
                           {...draggableProvided.dragHandleProps}
                           ref={draggableProvided.innerRef}
                         >
-                          <Text>{`${
-                            item[Object.keys(item)]
-                          } | itemId: ${Object.keys(item)}`}</Text>
-                          {/* {draggableSnapshot.isDragging && (
-                            <span style={{ display: "none" }}>
-                              {item[Object.keys(item)]}
-                            </span>
-                          )} */}
+                          <Text>{item[Object.keys(item)]} </Text>
+
                           <span style={{ display: "none" }}>
                             {droppableProvided.placeholder}
                           </span>
@@ -71,18 +60,19 @@ export default function ItemsCatalog({ column, itemsByCategory }) {
   );
 
   return (
-    <Accordion
-      sx={{ maxWidth: 420 }}
-      mx="auto"
-      variant="filled"
-      classNames={classes}
-      className={classes.root}
-      defaultValue="customization"
-      multiple
-      value={accordionValue}
-      onChange={setAccordionValue}
-    >
-      {renderAccordionCatalog}
-    </Accordion>
+    <>
+      <Accordion
+        sx={{ maxWidth: 420 }}
+        mx="auto"
+        variant="filled"
+        classNames={classes}
+        className={classes.root}
+        multiple
+        value={accordionValue}
+        onChange={setAccordionValue}
+      >
+        {renderAccordionCatalog}
+      </Accordion>
+    </>
   );
 }
