@@ -11,6 +11,7 @@ import {
   useMantineTheme,
   NumberInput,
   Button,
+  Group,
 } from "@mantine/core";
 
 export default function DroppableColumn({
@@ -38,37 +39,35 @@ export default function DroppableColumn({
                 : "transparent",
             }}
           >
-            {selectedItemsIds &&
-            selectedItemsIds.length &&
-            Object.keys(allItems).length
-              ? selectedItemsIds.map((item, index) => (
-                  <Draggable
-                    key={Object.keys(item)[0]}
-                    draggableId={Object.keys(item)[0]}
-                    index={index}
-                  >
-                    {(draggableProvided, draggableSnapshot) => (
-                      <div
-                        className={cx(classes.packItem, {
-                          [classes.itemDragging]: draggableSnapshot.isDragging,
-                        })}
-                        {...draggableProvided.draggableProps}
-                        {...draggableProvided.dragHandleProps}
-                        ref={draggableProvided.innerRef}
-                      >
-                        <div>
-                          {console.log("item", item)}
-                          {console.log("itemId", item[Object.keys(item)[0]])}
-                          {console.log("dragId", Object.keys(item)[0])}
-                          <Text>{allItems[1]["itemName"]}</Text>
-                          <NumberInput defaultValue={1} />
-                          <Button onClick={() => handleDeleteItem()}></Button>
-                        </div>
-                      </div>
-                    )}
-                  </Draggable>
-                ))
-              : null}
+            {Object.keys(allItems).length &&
+              selectedItemsIds.length &&
+              selectedItemsIds.map((item, index) => (
+                <Draggable
+                  key={Object.keys(item)[0]}
+                  draggableId={Object.keys(item)[0]}
+                  index={index}
+                >
+                  {(draggableProvided, draggableSnapshot) => (
+                    <div
+                      className={cx(classes.packItem, {
+                        [classes.itemDragging]: draggableSnapshot.isDragging,
+                      })}
+                      {...draggableProvided.draggableProps}
+                      {...draggableProvided.dragHandleProps}
+                      ref={draggableProvided.innerRef}
+                    >
+                      <Group>
+                        <Text>
+                          {allItems[item[Object.keys(item)[0]]].itemName}
+                        </Text>
+                        <NumberInput defaultValue={1} />
+                        <Button onClick={() => handleDeleteItem()}></Button>
+                      </Group>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+
             {droppableProvided.placeholder}
           </Stack>
         )}
