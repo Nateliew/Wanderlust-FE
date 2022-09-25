@@ -1,24 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import "../App.css";
 import axios from "axios";
 import { CommentCard } from "./CommentCard";
 import { TextInput, Button } from "@mantine/core";
+import { UserContext } from "../App";
 
 const Comments = () => {
   const [comments, setComments] = useState([]);
   const [commentContent, setCommentContent] = useState();
+  const user_id = useContext(UserContext);
+
+  console.log(user_id);
+
   const params = useParams();
   const tripId = params.tripId;
 
   const trip_id = Number(params);
-  const user_id = 1;
 
   const getComments = async () => {
     let initialComments = await axios.get(
       `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/comments`
     );
     setComments(initialComments.data);
+    console.log(comments);
   };
 
   useEffect(() => {
@@ -28,30 +33,15 @@ const Comments = () => {
   // if (!trips) {
   //   return "No Profile";
   // }
-  // const [isEditing, setIsEditing] = useState(false);
 
-  // const handleClick = () => {
-  //   setIsEditing(true);
-  // };
-
-  // const handleKeyPress = (e) => {
-  //   if (e.key === "Enter") {
-  //     setIsEditing(false);
-  //   }
-  // };
-
-  const handleChange = (event, index) => {
+  const handleChange = (event) => {
     setCommentContent(event.target.value);
-    // setCommentContent((state) => [
-    //   ...state.slice(0, index),
-    //   { ...state[index], content: event.target.value },
-    //   ...state.slice(index + 1),
-    // ]);
   };
 
   const handleSubmit = async (event) => {
     // Prevent default form redirect on submission
     event.preventDefault();
+    console.log("is this running?");
     // Send request to create new comment in backend
     await axios
       .post(`${process.env.REACT_APP_API_SERVER}/trips/${tripId}/comments`, {
@@ -59,7 +49,6 @@ const Comments = () => {
         trip_id,
         user_id,
       })
-
       .then((res) => {
         // Clear form state
         setCommentContent("");
@@ -68,24 +57,6 @@ const Comments = () => {
         console.log(response);
       });
   };
-
-  // const handleUpdate = async (comment) => {
-  //   // Send request to create new comment in backend
-  //   await axios
-  //     .put(`${BACKEND_URL}/trips/${tripId}/comments`, {
-  //       content: commentContent,
-  //       trip_id,
-  //       user_id,
-  //     })
-
-  //     .then((res) => {
-  //       // Clear form state
-  //       setCommentContent("");
-  //     })
-  //     .then((response) => {
-  //       console.log(response);
-  //     });
-  // };
 
   const deleteComment = async (id) => {
     console.log(id);
@@ -99,15 +70,13 @@ const Comments = () => {
 
   return (
     <div className="App">
-      {comments
-        // .filter((comment) => comment.tripId === tripId)
-        .map((comment, index) => {
-          return (
-            <div key={index}>
-              {<CommentCard comment={comment} deleteComment={deleteComment} />}
-            </div>
-          );
-        })}
+      {comments.map((comment, index) => {
+        return (
+          <div key={index}>
+            {<CommentCard comment={comment} deleteComment={deleteComment} />}
+          </div>
+        );
+      })}
       <br />
       <label>Comments</label>
       <form onSubmit={handleSubmit}>
@@ -117,8 +86,9 @@ const Comments = () => {
           name="content"
           value={commentContent}
           onChange={handleChange}
+          // onClick={(e) => handleChange(e)}
         />
-        <Button variant="secondary" type="submit">
+        <Button variant="primary" type="submit">
           Submit
         </Button>
       </form>

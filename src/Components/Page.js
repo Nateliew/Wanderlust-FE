@@ -1,16 +1,16 @@
+import React, { useState } from "react";
 import {
   createStyles,
   Image,
   Container,
   Title,
-  Button,
-  Group,
   Text,
   List,
   ThemeIcon,
 } from "@mantine/core";
 import { IconCheck } from "@tabler/icons";
 import moment from "moment";
+import CountryImage from "./CountryImages";
 
 const UseStyles = createStyles((theme) => ({
   inner: {
@@ -72,6 +72,7 @@ export default function PageTrip({ trip }) {
   var moment = require("moment");
   var date1 = moment(trip.startDate).format("MMM Do YY");
   var date2 = moment(trip.endDate).format("MMM Do YY");
+  const [source, setSource] = useState();
 
   return (
     <div>
@@ -120,12 +121,14 @@ export default function PageTrip({ trip }) {
               </Button>
             </Group> */}
           </div>
-          <Image
+          <Image src={source} className={classes.image} />
+          {<CountryImage country={trip.country} setSource={setSource} />};
+          {/* <Image
             src={
               "https://3.bp.blogspot.com/-f8YEIEmX2iU/XFUltBx9roI/AAAAAAAABz0/DlgVC_hx9eEOY9pyw0S3ehCFJqh1JRbjgCKgBGAs/w0/mount-fuji-japan-nature-landscape-1-4K.jpg"
             }
             className={classes.image}
-          />
+          /> */}
         </div>
       </Container>
     </div>

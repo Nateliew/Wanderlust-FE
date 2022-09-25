@@ -6,6 +6,7 @@ import CountryImage from "./CountryImages";
 
 export default function Single({ trip, handleDelete }) {
   const [source, setSource] = useState();
+
   return (
     <Card shadow="sm" p="xl" component="a">
       <Card.Section>
@@ -27,7 +28,7 @@ export default function Single({ trip, handleDelete }) {
         fullWidth
         mt="md"
         radius="md"
-        onClick={(e) => handleDelete(trip.id)}
+        onClick={() => handleDelete(trip.id)}
       >
         Delete{" "}
       </Button>

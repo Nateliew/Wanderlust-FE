@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../App.css";
 import { TextInput, Text, Button, Stack, createStyles } from "@mantine/core";
+import { UserContext } from "../App";
+// import { button } from "@elastic/eui";
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -25,10 +27,10 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function AddTrip({ user }) {
-  const userId = 1;
+  const userId = useContext(UserContext);
   const navigate = useNavigate();
   const [country, setCountry] = useState("");
-  const [startDate, setStartDate] = useState();
+  const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [duration, setDuration] = useState(0);
   const [allCountries, setAllCountries] = useState([]);
@@ -56,6 +58,8 @@ export default function AddTrip({ user }) {
     var date2 = new Date(startDate);
     var diff = date1.getDate() - date2.getDate();
     console.log(diff);
+
+    console.log("USERIDDDDDDDDD IN ADDTRIP: ", userId);
 
     // Send request to create new listing in backend
     await axios
@@ -99,8 +103,8 @@ export default function AddTrip({ user }) {
             placeholder="Name of the Countries"
           >
             {allCountries.map((row, index) => (
-              <option key={index} value={row?.name?.common}>
-                {row?.name?.common}
+              <option key={index} value={row.name.common}>
+                {row.name.common}
               </option>
             ))}
           </select>

@@ -9,15 +9,14 @@ const useStyles = createStyles((theme) => ({
 
 export function CommentCard({ comment, deleteComment }) {
   const { classes } = useStyles();
+  console.log(comment);
   return (
     <div>
       <Group>
         <Avatar src={"A"} alt={comment.userId} radius="xl" />
         <div>
           <Text size="sm">{comment.userId}</Text>
-          <Text size="xs" color="dimmed">
-            {/* {postedAt} */}
-          </Text>
+          <Text size="xs" color="dimmed"></Text>
         </div>
       </Group>
       <Text size="sm">{comment.text}</Text>

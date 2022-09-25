@@ -13,10 +13,8 @@ import TripMenu from "./Components/TripMenu";
 import TripDashboard from "./Components/TripDashboard";
 import TripCalendar from "./Components/TripCalendar";
 import TripWishlist from "./Components/TripWishlist";
-// import PackingList from "./Components/PackingList";
 import Comments from "./Components/Comments";
 import TripPack from "./Components/TripPack/Packlist";
-// import PackList from "./Components/TripPack/Packlist";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -28,6 +26,7 @@ root.render(
     scope={process.env.REACT_APP_SCOPE}
   >
     <BrowserRouter>
+      {/* <UserContext.Provider value={userId}> */}
       <Routes>
         <Route index element={<Landing />} />
         <Route path="/" element={<App />}>
@@ -45,6 +44,7 @@ root.render(
           <Route path="*" element={"Nothing here!"} />
         </Route>
       </Routes>
+      {/* </UserContext.Provider> */}
     </BrowserRouter>
   </Auth0Provider>
 );

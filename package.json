@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.10.4",
     "@mantine/core": "^5.3.2",
     "@mantine/hooks": "^5.3.2",
+    "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.6",
     "@mui/styled-engine-sc": "^5.10.6",
     "@tabler/icons": "^1.97.0",
