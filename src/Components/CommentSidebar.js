@@ -18,7 +18,7 @@ export default function Sidebar() {
       </Drawer>
 
       <Group position="center">
-        <Button onClick={() => setOpened(true)}>Comments</Button>
+        <p onClick={() => setOpened(true)}>Comments</p>
       </Group>
     </>
   );

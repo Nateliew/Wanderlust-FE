@@ -9,12 +9,9 @@ import {
 import axios from "axios";
 import Sidebar from "./CommentSidebar";
 import PageTrip from "./Page";
-// import Comments from "./Comments";
-// import { Routes, Route } from "react-router-dom";
 
 export default function TripDashboard() {
   // react routes
-  const navigate = useNavigate();
   const params = useParams();
   const [trips, setTrips] = useState([]);
   const { tripId } = useParams();
@@ -31,35 +28,10 @@ export default function TripDashboard() {
     getSingle();
   }, []);
 
-  console.log(trips);
-  console.log(params);
-
   return (
     <div>
       <p>Trip {Number(params.tripId)} Dashboard</p>
-      {/* <Link
-        style={{ display: "block", margin: "1rem 0" }}
-        to={`/trips/${tripId}/comments`}
-        key={tripId}
-        tripId={tripId}
-      >
-        Comments{" "}
-      </Link> */}
-      {/* {trips
-        .filter((trip) => Number(params.tripId) === Number(trip.id))
-        .map((trip) => {
-          return ( */}
-      <div>
-        {/* <p>{trip.country}</p>
-              <p>{trip.startDate}</p>
-              <p>{trip.duration}</p> */}
-        {<PageTrip trip={trips} />}
-      </div>
-      {/* );
-        })} */}
-      {/* <button onClick={() => navigate("/home")}>Back to Home</button> */}
-      <Sidebar />
-
+      <div>{<PageTrip trip={trips} />}</div>
       <Outlet />
     </div>
   );

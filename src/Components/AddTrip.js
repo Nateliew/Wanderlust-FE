@@ -2,8 +2,29 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../App.css";
+import { TextInput, Text, Button, Stack, createStyles } from "@mantine/core";
 import { UserContext } from "../App";
 // import { button } from "@elastic/eui";
+
+const useStyles = createStyles((theme) => ({
+  root: {
+    position: "relative",
+  },
+
+  input: {
+    height: "auto",
+    paddingTop: 18,
+  },
+
+  Text: {
+    position: "absolute",
+    pointerEvents: "none",
+    fontSize: theme.fontSizes.xs,
+    paddingLeft: theme.spacing.sm,
+    paddingTop: theme.spacing.sm / 2,
+    zIndex: 1,
+  },
+}));
 
 export default function AddTrip({ user }) {
   const userId = useContext(UserContext);
@@ -13,6 +34,7 @@ export default function AddTrip({ user }) {
   const [endDate, setEndDate] = useState("");
   const [duration, setDuration] = useState(0);
   const [allCountries, setAllCountries] = useState([]);
+  const { classes } = useStyles();
 
   const handleChange = (event) => {
     switch (event.target.name) {
@@ -70,10 +92,10 @@ export default function AddTrip({ user }) {
 
   return (
     <div>
-      <p>Add Trip</p>
+      <Text>Add Trip</Text>
       <form onSubmit={handleSubmit} className="form">
-        <div>
-          <label>Country</label>
+        <Stack>
+          <Text>Country</Text>
           <select
             name="country"
             value={country}
@@ -81,14 +103,15 @@ export default function AddTrip({ user }) {
             placeholder="Name of the Countries"
           >
             {allCountries.map((row, index) => (
-              <option key={index} value={row?.name?.common}>
-                {row?.name?.common}
+              <option key={index} value={row.name.common}>
+                {row.name.common}
               </option>
             ))}
           </select>
-        </div>
-        <div>
-          <label>Start date</label>
+        </Stack>
+        <br />
+        <Stack>
+          <Text>Start date</Text>
           <input
             type="date"
             name="startDate"
@@ -96,9 +119,10 @@ export default function AddTrip({ user }) {
             onChange={handleChange}
             placeholder="START"
           ></input>
-        </div>
-        <div>
-          <label>End date</label>
+        </Stack>
+        <br />
+        <Stack>
+          <Text>End date</Text>
           <input
             type="date"
             name="endDate"
@@ -106,13 +130,14 @@ export default function AddTrip({ user }) {
             onChange={handleChange}
             placeholder="END"
           />
-        </div>
-        <button variant="primary" type="submit">
+        </Stack>
+        <br />
+        <Button variant="primary" type="submit">
           Add
-        </button>
+        </Button>
       </form>
       <br />
-      <button onClick={() => navigate("/home")}>Back to Home</button>
+      <Button onClick={() => navigate("/home")}>Back to Home</Button>
     </div>
   );
 }

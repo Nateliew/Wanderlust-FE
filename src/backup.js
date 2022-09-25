@@ -64,3 +64,122 @@
   <Link to="packinglist">Packing List |</Link>
   <a href="">Add friend</a>
 </div>;
+
+const getInitialData = async () => {
+  console.log("user", user);
+  console.log("did this run??");
+  if (isAuthenticated) {
+    if (userExist.includes(user.name.trim())) {
+      console.log("already existed");
+      console.log(userExist);
+      setUserInfo(user);
+
+      const accessToken = await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUDIENCE,
+        scope: process.env.REACT_APP_SCOPE,
+      });
+
+      axios
+        .get(`${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+
+        .then((response) => {
+          setTrips(response.data);
+        });
+    } else {
+      console.log("user:", user);
+      console.log("doesnt exist");
+      console.log(userExist);
+      console.log("nickname:", user.nickname);
+
+      const accessToken = await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUDIENCE,
+        scope: process.env.REACT_APP_SCOPE,
+      });
+      axios
+        .post(
+          `${process.env.REACT_APP_API_SERVER}/users`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          },
+          {
+            // Sending HTTP POST request
+            firstName: user.nickname,
+            lastName: user.nickname,
+            email: user.email,
+          }
+        )
+        .then((res) => {
+          console.log("User has been posted");
+        });
+      axios
+        .get(`${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+
+        .then((response) => {
+          setTrips(response.data);
+        });
+      // post to backend /users to store the user info
+    }
+  } else {
+    console.log("REDIRECT");
+    loginWithRedirect();
+  }
+};
+
+//
+// const { user } = useAuth0();
+
+//user is here
+// const userId = 1;
+
+//match the user id with trip id in user_trip table
+//get trip ID from user_trip table
+
+// upon login, we should check if the user exists in users model
+// findORcreate user's info
+
+// if user exists, then we show the list of trips
+
+// if user does not exist in model, we create userinfo and no trips data
+
+// const getUserInfo = async () => {
+//   setUserEmail(user.email);
+//   setUserName(user.nickname);
+
+//   const userInfo = await axios.post(
+//     `${process.env.REACT_APP_API_SERVER}/users`,
+//     {
+//       name: user.nickname,
+//       email: user.email,
+//     }
+//   );
+
+//   return userInfo.data.id;
+// };
+
+//ORIGINAL CODE WITH AUTHENTICATION ETC
+// const getInitialData = async () => {
+//   console.log("user", user);
+//   console.log("did this run??");
+
+//   const userId = getUserInfo();
+
+//   setUserEmail(user.email);
+//   setUserName(user.nickname);
+
+//   axios
+//     .post(`${process.env.REACT_APP_API_SERVER}/users`, {
+//       name: user.nickname,
+//       email: user.email,
+//     })
+//     .then((response) => response.data[0].id)
+//     .then((res) =>
+//       axios.get(`${process.env.REACT_APP_API_SERVER}/trips/users/${res}`)
+//     )
+//     .then((response) => {
+//       setTrips(response.data);
+//     });
+// };

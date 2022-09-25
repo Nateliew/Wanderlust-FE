@@ -23,9 +23,29 @@ import {
   ColorSchemeProvider,
   Title,
   Button,
+  Anchor,
+  createStyles,
+  Container,
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons";
-import NavbarNested from "./Components/Navbars";
+import LogoutButton from "./Components/Logout";
+import NavbarMinimal from "../src/Components/Navbars";
+
+
+const useStyles = createStyles((theme) => ({
+  navbar: {
+    [theme.fn.largerThan("sm")]: {
+      display: "none",
+    },
+  },
+
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: "100%",
+  },
+}));
 
 export const UserContext = createContext();
 
@@ -35,6 +55,7 @@ function App() {
   const theme = useMantineTheme();
   const [colorScheme, setColorScheme] = useState("light");
   const [userId, setUserId] = useState("");
+  const { classes } = useStyles();
 
   const toggleColorScheme = () => {
     setColorScheme(colorScheme === "dark" ? "light" : "dark");
@@ -90,16 +111,17 @@ function App() {
             }}
             navbarOffsetBreakpoint="sm"
             asideOffsetBreakpoint="sm"
-            // navbar={
-            //   <Navbar
-            //     p="md"
-            //     hiddenBreakpoint="sm"
-            //     hidden={opened}
-            //     width={{ sm: 200, lg: 300 }}
-            //   >
-            //     <Text>Insert Here????</Text>
-            //   </Navbar>
-            // }
+            navbar={
+              <Navbar
+                width={{ base: "100%", sm: 10 }}
+                hidden={!opened}
+                className={classes.navbar}
+              >
+                <Anchor>Home</Anchor>
+                <Anchor>Trips</Anchor>
+                <Anchor></Anchor>
+              </Navbar>
+            }
             // aside={
             //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
             //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
@@ -112,51 +134,58 @@ function App() {
             //     Application footer
             //   </Footer>
             // }
+            // aside={
+            //   <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
+            //     {/* <TestSide /> */}
+            //   </Aside>
+            // }
             header={
               <Header height={70} p="md">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    height: "100%",
-                  }}
-                >
-                  <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-                    <Burger
-                      opened={opened}
-                      onClick={() => setOpened((o) => !o)}
-                      size="sm"
-                      color={theme.colors.gray[6]}
-                      mr="xl"
-                    />
-                  </MediaQuery>
-
-                  <Text>Application header</Text>
-                  <ActionIcon
-                    variant="outline"
-                    color={colorScheme === "dark" ? "yellow" : "blue"}
-                    onClick={() => toggleColorScheme()}
-                    title="Toggle color scheme"
-                  >
-                    {colorScheme === "dark" ? (
-                      <IconSun size={18} />
-                    ) : (
-                      <IconMoonStars size={18} />
-                    )}
-                  </ActionIcon>
-                  <Button
-                    onClick={() => {
-                      logout({ returnTo: window.location.origin });
+                <Container className={classes.header}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "100%",
                     }}
                   >
-                    Log out
-                  </Button>
-                </div>
+                    <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+                      <Burger
+                        opened={opened}
+                        onClick={() => setOpened((o) => !o)}
+                        size="xl"
+                        color={theme.colors.gray[6]}
+                        mr="xl"
+                      />
+                    </MediaQuery>
+                    <Text fontFamily="Vollkorn">WanderlustBwa</Text>
+                    <ActionIcon
+                      variant="outline"
+                      color={colorScheme === "dark" ? "yellow" : "blue"}
+                      onClick={() => toggleColorScheme()}
+                      title="Toggle color scheme"
+                      className="actionIcon"
+                    >
+                      {colorScheme === "dark" ? (
+                        <IconSun size={18} />
+                      ) : (
+                        <IconMoonStars size={18} />
+                      )}
+                    </ActionIcon>
+                    <Button
+                      onClick={() => {
+                        logout({ returnTo: window.location.origin });
+                      }}
+                      className="logoutButton"
+                    >
+                      Log out
+                    </Button>
+                  </div>
+                </Container>
               </Header>
             }
           >
-            <Text>Resize app to see responsive navbar in action</Text>
-
+            <Text></Text>
             <Outlet />
           </AppShell>
         </MantineProvider>

@@ -28,12 +28,10 @@ export default function TripMenu() {
         {/* <Link to="calendar">Calendar</Link>
         <Link to="wishlist">Wishlist </Link> */}
         <Link to="packinglist">Packing List</Link>
-
+        <Link> {<Sidebar />}</Link>
         <Link to="/#">Add friend</Link>
-        <Link to="/#">Discussion</Link>
         <button onClick={() => navigate("/home")}>Back to Home</button>
       </div>
-      {/* <Sidebar /> */}
       <Outlet />
     </div>
   );
