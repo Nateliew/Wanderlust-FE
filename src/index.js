@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
 
 // import for components
 import Landing from "./Components/Landing";
@@ -30,7 +29,6 @@ root.render(
     scope={process.env.REACT_APP_SCOPE}
   >
     <BrowserRouter>
-      {/* <UserContext.Provider value={userId}> */}
       <Routes>
         <Route index element={<Landing />} />
         <Route path="/" element={<App />}>
@@ -48,7 +46,6 @@ root.render(
           <Route path="*" element={"Nothing here!"} />
         </Route>
       </Routes>
-      {/* </UserContext.Provider> */}
     </BrowserRouter>
   </Auth0Provider>
 );

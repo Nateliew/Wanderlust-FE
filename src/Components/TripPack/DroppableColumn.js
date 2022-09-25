@@ -7,25 +7,35 @@ import {
   Stack,
   Text,
   Title,
-  Box,
   useMantineTheme,
   NumberInput,
-  Button,
+  Group,
+  ActionIcon,
 } from "@mantine/core";
+
+import { TrashX } from "tabler-icons-react";
 
 export default function DroppableColumn({
   column,
   allItems,
   selectedItemsIds,
-  dragIds,
+
   handleDeleteItem,
+  handleDeleteBag,
 }) {
   const theme = useMantineTheme();
   const { classes, cx } = dragDropStyles();
 
   return (
     <Grid.Col sx={{ backgroundColor: theme.colors.gray[1] }}>
-      <Title>{column.id}</Title>
+      {column.id !== "shared" ? (
+        <Group position="center">
+          <Title>{column.id}</Title>
+          <ActionIcon size="xs" onClick={() => handleDeleteBag(column.id)}>
+            <TrashX />
+          </ActionIcon>
+        </Group>
+      ) : null}
       <Droppable droppableId={column.id} direction="vertical">
         {(droppableProvided, droppableSnapshot) => (
           <Stack
@@ -38,11 +48,13 @@ export default function DroppableColumn({
                 : "transparent",
             }}
           >
-            {selectedItemsIds &&
-            selectedItemsIds.length &&
-            Object.keys(allItems).length
-              ? selectedItemsIds.map((itemUid, index) => (
-                  <Draggable key={itemUid} draggableId={itemUid} index={index}>
+            {Object.keys(allItems).length && selectedItemsIds.length
+              ? selectedItemsIds.map((item, index) => (
+                  <Draggable
+                    key={Object.keys(item)[0]}
+                    draggableId={Object.keys(item)[0]}
+                    index={index}
+                  >
                     {(draggableProvided, draggableSnapshot) => (
                       <div
                         className={cx(classes.packItem, {
@@ -52,16 +64,25 @@ export default function DroppableColumn({
                         {...draggableProvided.dragHandleProps}
                         ref={draggableProvided.innerRef}
                       >
-                        <div>
-                          <Text>{allItems[dragIds[itemUid]]["name"]}</Text>
-                          <NumberInput defaultValue={1} />
-                          <Button onClick={() => handleDeleteItem()}></Button>
-                        </div>
+                        <Group spacing="xs" position="center">
+                          <ActionIcon
+                            size="xs"
+                            onClick={() =>
+                              handleDeleteItem(Object.keys(item)[0])
+                            }
+                          >
+                            <TrashX />
+                          </ActionIcon>
+                          <Text>
+                            {allItems[item[Object.keys(item)[0]]].itemName}
+                          </Text>
+                        </Group>
                       </div>
                     )}
                   </Draggable>
                 ))
-              : null}
+              : "No items added yet"}
+
             {droppableProvided.placeholder}
           </Stack>
         )}

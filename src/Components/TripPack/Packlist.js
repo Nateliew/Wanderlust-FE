@@ -1,35 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { UserContext } from "../../App";
 
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext } from "react-beautiful-dnd";
 
 import {
   Title,
   Text,
   Box,
   Grid,
-  Stack,
   useMantineTheme,
   SimpleGrid,
   Button,
   TextInput,
   Group,
+  ActionIcon,
+  Stack,
 } from "@mantine/core";
 import ItemsCatalog from "./ItemsCatalog";
 import DroppableColumn from "./DroppableColumn";
 
+import { Plus } from "tabler-icons-react";
+
 export default function TripPack(props) {
   //for testing
+
+  // const userId = useContext(UserContext);
+  // const { tripId } = useParams();
+
   const userId = 2;
   const tripId = 2;
 
   const theme = useMantineTheme();
 
-  // LOAD USER ITEMS
-  const [userItems, setUserItems] = useState({});
-  const [sharedTripItems, setSharedTripItems] = useState({});
+  const [newItem, setNewItem] = useState("");
 
   // FOR DRAG AND DROP INITIAL DATA
   const [allItems, setAllItems] = useState([]);
@@ -40,96 +46,50 @@ export default function TripPack(props) {
   const [sharedItemsColumn, setSharedItemsColumn] = useState({
     shared: {
       id: "shared",
-      itemsUids: ["def"],
-    },
-  });
-
-  const [columns, setColumns] = useState({
-    "carry-on": {
-      id: "carry-on",
-      itemsUids: ["abc"],
-    },
-    "check-in": {
-      id: "check-in",
       itemsUids: [],
     },
   });
 
+  const [columns, setColumns] = useState({
+    // "carry-on": {
+    //   id: "carry-on",
+    //   itemsUids: [],
+    // },
+    // "check-in": {
+    //   id: "check-in",
+    //   itemsUids: [],
+    // },
+  });
+
   const [columnOrder, setColumnOrder] = useState(Object.keys(columns));
   // GET ITEMS CATALOG FROM BACKEND
-  const [itemsCatalog, setItemsCatalog] = useState([]);
   const [itemsCatalogByCat, setItemsCatalogByCat] = useState({});
   const [bagType, setBagType] = useState("");
-  const [selectedItems, setSelectedItems] = useState({ abc: 1 }, { def: 7 });
 
-  const getItemsCatalogByCat = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/items-catalog/by-category`
-      );
-
-      setItemsCatalogByCat(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const getAllItems = async () => {
+    // get all items in template list
+    const itemsResponse = await axios.get(
+      `${process.env.REACT_APP_API_SERVER}/items-catalog`
+    );
+    console.log(itemsResponse.data);
+    setAllItems(itemsResponse.data.itemsMap);
+    setItemsCatalogByCat(itemsResponse.data.itemByCategory);
+    setItemsColumn(itemsResponse.data.itemsColumn);
   };
 
-  const getItemsCatalog = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/items-catalog`
-      );
-
-      const itemsIds = [];
-      let itemsMap = {};
-      response.data.forEach((item) => {
-        itemsIds.push(item.id);
-        itemsMap[item.id] = {
-          id: item.id,
-          name: item.itemName,
-          uuid: uuidv4(),
-        };
-      });
-      setItemsColumn((prev) => {
-        let newItemsCol = { ...prev };
-        newItemsCol["itemsIds"] = itemsIds;
-        return newItemsCol;
-      });
-      setAllItems(itemsMap);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getUserTripItems = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/users/${userId}`
-      );
-      console.log(response.data);
-      setUserItems(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getSharedTripItems = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/shared`
-      );
-      console.log(response.data);
-      setUserItems(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const getInitialDataApi = async () => {
+    const userItemsResponse = await axios.get(
+      `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/users/${userId}`
+    );
+    console.log("useritems:", userItemsResponse.data);
+    setSharedItemsColumn(userItemsResponse.data.sharedColumn);
+    setColumns(userItemsResponse.data.column);
+    setColumnOrder(Object.keys(userItemsResponse.data.column));
   };
 
   useEffect(() => {
-    getItemsCatalogByCat();
-    getItemsCatalog();
-    getUserTripItems();
-    getSharedTripItems();
+    getAllItems();
+    getInitialDataApi();
   }, []);
 
   const reorderColumnList = (sourceCol, startIndex, endIndex) => {
@@ -162,6 +122,7 @@ export default function TripPack(props) {
 
     const sourceCol = columns[source.droppableId];
     const destinationCol = columns[destination.droppableId];
+
     console.log("sourcecol", sourceCol);
     console.log("destination", destinationCol);
 
@@ -191,7 +152,7 @@ export default function TripPack(props) {
     // if user moves from one column to another
     // ---------- ADD API CALL TO UPDATE BACKEND
     const startItemsIds = sourceCol ? Array.from(sourceCol.itemsUids) : [];
-    console.log("5startitems", startItemsIds);
+
     // const selected = [];
     let selected = "";
     // if user drags items from catalog, dun remove from column 1 and generate new uuid
@@ -200,8 +161,6 @@ export default function TripPack(props) {
       source.droppableId !== destination.droppableId
     ) {
       let newDraggableId = uuidv4();
-      setSelectedItems((prev) => ({ ...prev, [newDraggableId]: source.index }));
-      selected = newDraggableId;
       // POST REQUEST
 
       const itemsList = {
@@ -218,123 +177,190 @@ export default function TripPack(props) {
 
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_SERVER}/trips/2/users/2/packing-list`,
+          `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/users/${userId}`,
           itemsList
         );
 
         console.log(response.data);
+        setSharedItemsColumn(response.data.sharedColumn);
+        setColumns(response.data.column);
       } catch (error) {
         console.log(error);
       }
     } else {
       selected = startItemsIds.splice(source.index, 1);
-      console.log("1startitems", startItemsIds);
+      console.log(selected);
+      console.log("destId", destination.droppableId);
+      console.log("desIndex", destination.index);
+      const itemData = {
+        itemUid: Object.keys(selected[0]),
+        columnIndex: destination.index,
+        bagType: destination.droppableId,
+      };
+
+      try {
+        const response = await axios.put(
+          `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/users/${userId}`,
+          itemData
+        );
+        console.log(response);
+        getInitialDataApi();
+      } catch (error) {
+        console.log(error);
+      }
     }
-    const newStartCol = {
-      ...sourceCol,
-      itemsUids: startItemsIds,
-    };
-    console.log("2startitems", startItemsIds);
-
-    const endItemIds = Array.from(destinationCol.itemsUids);
-    endItemIds.splice(destination.index, 0, selected);
-    const newEndCol = {
-      ...destinationCol,
-      itemsUids: endItemIds,
-    };
-
-    const newState = {
-      ...columns,
-      [newStartCol.id]: newStartCol,
-      [newEndCol.id]: newEndCol,
-    };
-    setColumns(newState);
 
     // post data to backend in the format :
     //structure of itemsList: array of objects - {itemId, quantity, bagType, sharedItem, userId, tripId}
   };
 
   const handleAddBag = () => {
+    console.log(bagType);
     if (Object.keys(columns).includes(bagType)) {
       alert("bag already exists");
     } else {
+      console.log("did this tun?");
       setColumns((prev) => ({
         ...prev,
-        bagType: { id: bagType, itemsUids: [] },
+        [bagType]: { id: bagType, itemsUids: [] },
       }));
-      setColumnOrder(Object.keys(columns));
+      setColumnOrder((prev) => [...prev, bagType]);
+    }
+    setBagType("");
+  };
+
+  const handleDeleteBag = async (columnId) => {
+    console.log(columnId);
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/users/${userId}`,
+        { data: { bagType: columnId } }
+      );
+
+      console.log(response.data);
+      setSharedItemsColumn(response.data.sharedColumn);
+      setColumns(response.data.column);
+      setColumnOrder(Object.keys(response.data.column));
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const handleDeleteItem = () => {};
+  const handleDeleteItem = async (itemUid) => {
+    console.log(itemUid);
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/packing-list/users/${userId}`,
+        { data: { itemUid: itemUid } }
+      );
+
+      console.log(response.data);
+      setSharedItemsColumn(response.data.sharedColumn);
+      setColumns(response.data.column);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAddItem = async (e) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_SERVER}/items-catalog`,
+        { itemName: newItem }
+      );
+
+      getAllItems();
+      setNewItem("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Grid
-        style={{
-          backgroundColor: theme.colors.gray[6],
-          height: "85vh",
-          padding: theme.spacing.md,
-          textAlign: "center",
-        }}
-      >
-        <Grid.Col
-          sm={2}
-          sx={{
-            backgroundColor: theme.colors.red[3],
+    <Stack>
+      <Title italic align="center" sx={{ paddingTop: "3rem" }}>
+        Packing List
+      </Title>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Grid
+          style={{
+            height: "85vh",
+            padding: theme.spacing.md,
+            textAlign: "center",
           }}
         >
-          <Title italic>Items Catalog</Title>
-          <ItemsCatalog
-            column={itemsColumn.id}
-            itemsByCategory={itemsCatalogByCat}
-          />
-        </Grid.Col>
-        <Grid.Col sm={8} sx={{ backgroundColor: theme.colors.red[1] }}>
-          <Title italic>Luggage</Title>
-          <br />
-          <Group position="center">
-            <TextInput
-              placeholder="Type of Bag"
-              onChange={() => setBagType()}
-            />
-            <Button onClick={() => handleAddBag()}>Add Bag</Button>
-          </Group>
-          <SimpleGrid cols={columnOrder.length}>
-            {columnOrder.map((columnId, index) => {
-              const column = columns[columnId];
-              const dragIds = selectedItems;
-              const selectedItemsIds = column.itemsUids;
-
-              return (
-                <DroppableColumn
-                  key={index}
-                  column={column}
-                  allItems={allItems}
-                  selectedItemsIds={selectedItemsIds}
-                  dragIds={dragIds}
-                  handleDeleteItem={handleDeleteItem}
+          <Grid.Col sm={2}>
+            <Stack>
+              <Title order={2}>Items Catalog</Title>
+              <Group spacing="xs">
+                <TextInput
+                  value={newItem}
+                  onChange={(e) => setNewItem(e.target.value)}
+                  placeholder="Add More Items"
                 />
-              );
-            })}
-          </SimpleGrid>
-        </Grid.Col>
-        <Grid.Col
-          sm={2}
-          sx={{
-            backgroundColor: theme.colors.red[3],
-          }}
-        >
-          <Title italic>Shared</Title>
-          <DroppableColumn
-            column={sharedItemsColumn.shared}
-            allItems={allItems}
-            // selectedItemsIds={sharedItemsColumn.shared.itemsUids}
-            // dragIds={selectedItems}
-            handleDeleteItem={handleDeleteItem}
-          />
-        </Grid.Col>
-      </Grid>
-    </DragDropContext>
+                <ActionIcon
+                  variant="filled"
+                  color="pink"
+                  size="md"
+                  onClick={() => handleAddItem()}
+                >
+                  <Plus />
+                </ActionIcon>
+              </Group>
+              {itemsCatalogByCat && Object.keys(itemsCatalogByCat).length ? (
+                <ItemsCatalog
+                  column={itemsColumn.id}
+                  itemsByCategory={itemsCatalogByCat}
+                />
+              ) : (
+                "Loading"
+              )}
+            </Stack>
+          </Grid.Col>
+          <Grid.Col sm={7} sx={{ paddingLeft: "4rem", paddingRight: "4rem" }}>
+            <Stack>
+              <Title order={2}>Personal Luggage</Title>
+              <Group position="center">
+                <TextInput
+                  placeholder="Type of Bag"
+                  value={bagType}
+                  onChange={(e) => setBagType(e.target.value)}
+                />
+                <Button color="pink" onClick={() => handleAddBag()}>
+                  Add Bag
+                </Button>
+              </Group>
+              <SimpleGrid cols={columnOrder.length}>
+                {columnOrder.map((columnId, index) => {
+                  const column = columns[columnId];
+                  // const dragIds = selectedItems;
+                  const selectedItemsIds = column.itemsUids;
+
+                  return (
+                    <DroppableColumn
+                      key={index}
+                      column={column}
+                      allItems={allItems}
+                      selectedItemsIds={selectedItemsIds}
+                      handleDeleteItem={handleDeleteItem}
+                      handleDeleteBag={handleDeleteBag}
+                    />
+                  );
+                })}
+              </SimpleGrid>
+            </Stack>
+          </Grid.Col>
+          <Grid.Col sm={3}>
+            <Title order={2}>Shared Items</Title>
+            <DroppableColumn
+              column={sharedItemsColumn.shared}
+              allItems={allItems}
+              selectedItemsIds={sharedItemsColumn.shared.itemsUids}
+              handleDeleteItem={handleDeleteItem}
+            />
+          </Grid.Col>
+        </Grid>
+      </DragDropContext>
+    </Stack>
   );
 }
