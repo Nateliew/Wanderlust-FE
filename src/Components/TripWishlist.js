@@ -4,24 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Button } from "@mantine/core";
 import axios from "axios";
-const dummyData = [
-  {
-    id: "1",
-    place: "Nara Park",
-  },
-  {
-    id: "2",
-    place: "Osaka",
-  },
-  {
-    id: "3",
-    place: "Kyoto",
-  },
-  {
-    id: "4",
-    place: "Shin-Osaka",
-  },
-];
+
 export default function TripWishlist() {
   // const getListItems = async () => {
   //   try {
@@ -112,7 +95,7 @@ export default function TripWishlist() {
           ? places.map((place, index) => {
               return (
                 <div key={index}>
-                  {place.place_name}
+                  {place.placeName}
                   <Button onClick={(e) => deleteItem(place.place_name)}>
                     Delete
                   </Button>
