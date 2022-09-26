@@ -81,7 +81,7 @@ export default function Landing() {
         zIndex={0}
       />
       <Container className={classes.container}>
-        <Title className={classes.title}>WaderlustBwa </Title>
+        <Title className={classes.title}>WanderlustBWA </Title>
         <Text className={classes.description} size="xl" mt="xl">
           Fulfill your wanderlust{" "}
         </Text>
