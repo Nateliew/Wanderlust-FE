@@ -13,31 +13,7 @@ function Home() {
   const [trips, setTrips] = useState([]);
   const navigate = useNavigate();
 
-  // const [userEmail, setUserEmail] = useState({});
-  // const [userName, setUserName] = useState({});
   const userId = useContext(UserContext);
-
-  // upon login, we should check if the user exists in users model
-  // findORcreate user's info
-
-  // if user exists, then we show the list of trips
-
-  // if user does not exist in model, we create userinfo and no trips data
-
-  // const getUserInfo = async () => {
-  //   setUserEmail(user.email);
-  //   setUserName(user.nickname);
-
-  //   const userInfo = await axios.post(
-  //     `${process.env.REACT_APP_API_SERVER}/users`,
-  //     {
-  //       name: user.nickname,
-  //       email: user.email,
-  //     }
-  //   );
-
-  //   return userInfo.data.id;
-  // };
 
   const getInitialData = async () => {
     axios
@@ -48,33 +24,10 @@ function Home() {
       });
   };
 
-  //ORIGINAL CODE WITH AUTHENTICATION ETC
-  // const getInitialData = async () => {
-  //   console.log("user", user);
-  //   console.log("did this run??");
-
-  //   const userId = getUserInfo();
-
-  //   setUserEmail(user.email);
-  //   setUserName(user.nickname);
-
-  //   axios
-  //     .post(`${process.env.REACT_APP_API_SERVER}/users`, {
-  //       name: user.nickname,
-  //       email: user.email,
-  //     })
-  //     .then((response) => response.data[0].id)
-  //     .then((res) =>
-  //       axios.get(`${process.env.REACT_APP_API_SERVER}/trips/users/${res}`)
-  //     )
-  //     .then((response) => {
-  //       setTrips(response.data);
-  //     });
-  // };
-
   useEffect(() => {
-    console.log("userIDDDDDD:", userId);
-    getInitialData();
+    if (userId !== "") {
+      getInitialData();
+    }
   }, [userId]);
 
   const handleDelete = async (index, event) => {

@@ -2,7 +2,7 @@ import "./App.css";
 import axios from "axios";
 import { useState, useEffect, createContext, useContext } from "react";
 // for testing frontend
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 // for styling
 import { bwaTheme } from "./Styling/Theme";
 
@@ -16,7 +16,6 @@ import {
   Footer,
   Aside,
   Text,
-  MediaQuery,
   Burger,
   useMantineTheme,
   ActionIcon,
@@ -26,15 +25,14 @@ import {
   Anchor,
   createStyles,
   Container,
+  Drawer,
 } from "@mantine/core";
 import { IconSun, IconMoonStars } from "@tabler/icons";
 import LogoutButton from "./Components/Logout";
-import NavbarMinimal from "../src/Components/Navbars";
-
 
 const useStyles = createStyles((theme) => ({
   navbar: {
-    [theme.fn.largerThan("sm")]: {
+    [theme.fn.largerThan("xl")]: {
       display: "none",
     },
   },
@@ -64,9 +62,6 @@ function App() {
   const { user, logout } = useAuth0();
 
   const getUserInfo = async () => {
-    console.log("did this run?");
-    console.log("user in app", user);
-
     const userInfo = await axios.post(
       `${process.env.REACT_APP_API_SERVER}/users`,
       {
@@ -74,12 +69,10 @@ function App() {
         email: user.email,
       }
     );
-    console.log("USERINFO", userInfo);
     setUserId(userInfo.data[0].id);
   };
 
   useEffect(() => {
-    console.log("hello");
     getUserInfo();
   }, []);
 
@@ -109,38 +102,32 @@ function App() {
                     : theme.colors.dark[8],
               },
             }}
-            navbarOffsetBreakpoint="sm"
-            asideOffsetBreakpoint="sm"
+            // navbarOffsetBreakpoint="xl"
             navbar={
-              <Navbar
-                width={{ base: "100%", sm: 10 }}
-                hidden={!opened}
-                className={classes.navbar}
+              <Drawer
+                opened={opened}
+                onClose={() => setOpened(false)}
+                // hidden={!opened}
+                // width={{ base: 300 }}
+                height="100vh"
+                p="xs"
               >
-                <Anchor>Home</Anchor>
-                <Anchor>Trips</Anchor>
-                <Anchor></Anchor>
-              </Navbar>
+                {/* Navbar content */}
+              </Drawer>
             }
-            // aside={
-            //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-            //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-            //       <Text>Application sidebar</Text>
-            //     </Aside>
-            //   </MediaQuery>
-            // }
-            // footer={
-            //   <Footer height={60} p="md">
-            //     Application footer
-            //   </Footer>
-            // }
-            // aside={
-            //   <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-            //     {/* <TestSide /> */}
-            //   </Aside>
+            // navbar={
+            //   <Navbar hidden={!opened} className={classes.navbar}>
+            //     <Anchor>Home</Anchor>
+            //     <Anchor>Trips</Anchor>
+            //     <Anchor></Anchor>
+            //   </Navbar>
             // }
             header={
-              <Header height={70} p="md">
+              <Header
+                height={70}
+                p="md"
+                sx={{ backgroundColor: theme.colors.blue[4] }}
+              >
                 <Container className={classes.header}>
                   <div
                     style={{
@@ -149,16 +136,18 @@ function App() {
                       height: "100%",
                     }}
                   >
-                    <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-                      <Burger
-                        opened={opened}
-                        onClick={() => setOpened((o) => !o)}
-                        size="xl"
-                        color={theme.colors.gray[6]}
-                        mr="xl"
-                      />
-                    </MediaQuery>
-                    <Text fontFamily="Vollkorn">WanderlustBwa</Text>
+                    <Burger
+                      opened={opened}
+                      onClick={() => setOpened((o) => !o)}
+                      size="sm"
+                      color="white"
+                      // mr="sm"
+                    />
+
+                    <Title order={2} sx={{ color: "white" }}>
+                      WanderlustBWA
+                    </Title>
+
                     <ActionIcon
                       variant="outline"
                       color={colorScheme === "dark" ? "yellow" : "blue"}
