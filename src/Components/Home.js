@@ -4,10 +4,11 @@ import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 import TripsList from "./TripsList";
 import AddTrip from "./AddTrip";
-// import { withAuthenticationRequired, useAuth0 } from "@auth0/auth0-react";
 import { UserContext } from "../App";
 import { Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { Container, Box } from "@mantine/core";
+import { IconMapPins } from "@tabler/icons";
 
 function Home() {
   const [trips, setTrips] = useState([]);
@@ -39,19 +40,25 @@ function Home() {
   console.log(trips);
 
   return (
-    <div>
-      <Link to="/add-trip" className="addButton">
-        <Button>+</Button>
-      </Link>
-      <div>
-        <Link to="/home">
-          {<TripsList trips={trips} handleDelete={handleDelete} />}
-        </Link>
-      </div>
+    <Container>
+      <Button
+        mb="2rem"
+        leftIcon={<IconMapPins />}
+        onClick={() => navigate("/add-trip")}
+      >
+        Add New Trip
+      </Button>
+      <br />
+      {/* <div> */}
+      {/* <Link to="/home"> */}
+      <TripsList trips={trips} handleDelete={handleDelete} />
+      {/* </Link> */}
+      {/* </div>
       <Routes>
         <Route exact path="/add-trip" element={<AddTrip />}></Route>
-      </Routes>
-    </div>
+      </Routes> */}
+      {/* <Link to="/add-trip" className="addButton"> */}
+    </Container>
   );
 }
 

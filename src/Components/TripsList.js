@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Single from "./Card";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { TextInput, Text } from "@mantine/core";
 import "../App.css";
 
 const TripsList = ({ trips, handleDelete }) => {
   let [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   return (
     <div className="App">
@@ -43,6 +44,7 @@ const TripsList = ({ trips, handleDelete }) => {
                   float: "left",
                   justifyContent: "space-between",
                   padding: "0rem 0.5rem",
+                  textDecoration: "none",
                 }}
                 to={`/trips/${trip.id}`}
                 key={index}

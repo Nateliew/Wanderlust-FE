@@ -1,10 +1,18 @@
 import "./App.css";
 import axios from "axios";
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, createContext } from "react";
 // for testing frontend
 import { Outlet, useNavigate, Link } from "react-router-dom";
 // for styling
-import { bwaTheme } from "./Styling/Theme";
+
+import {
+  IconGlobe,
+  IconCalendar,
+  IconListDetails,
+  IconMessage2,
+  IconBackpack,
+  IconFriends,
+} from "@tabler/icons";
 
 import { withAuthenticationRequired, useAuth0 } from "@auth0/auth0-react";
 
@@ -13,22 +21,17 @@ import {
   AppShell,
   Navbar,
   Header,
-  Footer,
-  Aside,
   Text,
   Burger,
   useMantineTheme,
   ActionIcon,
   ColorSchemeProvider,
   Title,
-  Button,
-  Anchor,
   createStyles,
-  Container,
-  Drawer,
+  Group,
+  NavLink,
 } from "@mantine/core";
-import { IconSun, IconMoonStars } from "@tabler/icons";
-import LogoutButton from "./Components/Logout";
+import { IconSun, IconMoonStars, IconLogout, IconHome } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -54,6 +57,16 @@ function App() {
   const [colorScheme, setColorScheme] = useState("light");
   const [userId, setUserId] = useState("");
   const { classes } = useStyles();
+  const [trips, setTrips] = useState([]);
+
+  const getInitialData = async () => {
+    axios
+      .get(`${process.env.REACT_APP_API_SERVER}/trips/users/${userId}`)
+      .then((response) => {
+        console.log("response", response);
+        setTrips(response.data);
+      });
+  };
 
   const toggleColorScheme = () => {
     setColorScheme(colorScheme === "dark" ? "light" : "dark");
@@ -70,11 +83,63 @@ function App() {
       }
     );
     setUserId(userInfo.data[0].id);
+    const tripsInfo = await axios.get(
+      `${process.env.REACT_APP_API_SERVER}/trips/users/${userInfo.data[0].id}`
+    );
+    setTrips(tripsInfo.data);
   };
+
+  const getAllTrips = async () => {};
 
   useEffect(() => {
     getUserInfo();
   }, []);
+
+  const renderNavlinks = trips.map((trip, index) => (
+    <NavLink label={trip.country} key={index}>
+      <NavLink
+        icon={<IconGlobe size={14} />}
+        label="Dashboard"
+        onClick={() => {
+          navigate(`trips/${trip.id}`);
+          setOpened(!opened);
+        }}
+      />
+
+      <NavLink
+        icon={<IconCalendar size={14} />}
+        onClick={() => {
+          navigate(`trips/${trip.id}/calendar`);
+          setOpened(!opened);
+        }}
+        label="Calendar"
+      />
+      <NavLink
+        icon={<IconListDetails size={14} />}
+        onClick={() => {
+          navigate(`trips/${trip.id}/wishlist`);
+          setOpened(!opened);
+        }}
+        label="Wishlist"
+      />
+      <NavLink
+        icon={<IconBackpack size={14} />}
+        onClick={() => {
+          navigate(`trips/${trip.id}/packinglist`);
+          setOpened(!opened);
+        }}
+        label="Packing List"
+      />
+      <NavLink
+        icon={<IconFriends size={14} />}
+        onClick={() => {
+          navigate(`trips/${trip.id}/addfriend`);
+          setOpened(!opened);
+        }}
+        label="Add Friend"
+      />
+    </NavLink>
+  ));
 
   return (
     <UserContext.Provider value={userId}>
@@ -102,18 +167,28 @@ function App() {
                     : theme.colors.dark[8],
               },
             }}
-            // navbarOffsetBreakpoint="xl"
+            navbarOffsetBreakpoint="2000"
             navbar={
-              <Drawer
-                opened={opened}
-                onClose={() => setOpened(false)}
-                // hidden={!opened}
-                // width={{ base: 300 }}
-                height="100vh"
-                p="xs"
+              <Navbar
+                width={{ base: 300 }}
+                hidden={!opened}
+                hiddenBreakpoint="1900"
+                p="md"
+                sx={{ backgroundColor: theme.colors.blue[0] }}
               >
-                {/* Navbar content */}
-              </Drawer>
+                {renderNavlinks}
+              </Navbar>
+              // <Drawer
+              //   opened={opened}
+              //   onClose={() => setOpened(false)}
+              //   // hidden={!opened}
+              //   // width={{ base: 300 }}
+              //   height="100vh"
+              //   p="0"
+              // >
+              //   {/* Navbar content */}
+              //   <NavbarSimpleColored />
+              // </Drawer>
             }
             // navbar={
             //   <Navbar hidden={!opened} className={classes.navbar}>
@@ -126,31 +201,41 @@ function App() {
               <Header
                 height={70}
                 p="md"
-                sx={{ backgroundColor: theme.colors.blue[4] }}
+                sx={{ backgroundColor: theme.colors.blue[3] }}
               >
-                <Container className={classes.header}>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      height: "100%",
-                    }}
-                  >
+                <div
+                  style={{
+                    display: "flex",
+                    height: "100%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Group>
                     <Burger
                       opened={opened}
                       onClick={() => setOpened((o) => !o)}
                       size="sm"
-                      color="white"
+                      color={theme.colors.gray[9]}
                       // mr="sm"
                     />
-
-                    <Title order={2} sx={{ color: "white" }}>
-                      WanderlustBWA
-                    </Title>
-
                     <ActionIcon
-                      variant="outline"
-                      color={colorScheme === "dark" ? "yellow" : "blue"}
+                      variant="filled"
+                      color={theme.colors.gray[9]}
+                      onClick={() => navigate("/home")}
+                      title="Toggle color scheme"
+                      className="actionIcon"
+                    >
+                      <IconHome size={18} />
+                    </ActionIcon>
+                  </Group>
+
+                  <Title italic order={2} sx={{ color: theme.colors.gray[9] }}>
+                    WanderlustBWA
+                  </Title>
+                  <Group>
+                    <ActionIcon
+                      variant="filled"
+                      color={theme.colors.gray[9]}
                       onClick={() => toggleColorScheme()}
                       title="Toggle color scheme"
                       className="actionIcon"
@@ -161,16 +246,19 @@ function App() {
                         <IconMoonStars size={18} />
                       )}
                     </ActionIcon>
-                    <Button
+
+                    <ActionIcon
                       onClick={() => {
                         logout({ returnTo: window.location.origin });
                       }}
-                      className="logoutButton"
+                      variant="filled"
+                      color={theme.colors.gray[9]}
+                      className="actionIcon"
                     >
-                      Log out
-                    </Button>
-                  </div>
-                </Container>
+                      <IconLogout size={18} />
+                    </ActionIcon>
+                  </Group>
+                </div>
               </Header>
             }
           >

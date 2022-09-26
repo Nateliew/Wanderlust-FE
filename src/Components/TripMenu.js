@@ -1,36 +1,75 @@
-import React from "react";
-import {
-  Link,
-  useParams,
-  useNavigate,
-  NavLink,
-  Outlet,
-} from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useParams, Outlet } from "react-router-dom";
 import Sidebar from "./CommentSidebar";
+import { Tabs, Drawer, Container, Button, Group } from "@mantine/core";
+import {
+  IconGlobe,
+  IconCalendar,
+  IconListDetails,
+  IconMessage2,
+  IconBackpack,
+  IconFriends,
+} from "@tabler/icons";
+
+import Comments from "./Comments";
 
 export default function TripMenu() {
   // react routes
-  const navigate = useNavigate();
-  const params = useParams();
+  const [opened, setOpened] = useState(false);
 
   return (
     <div>
-      <div
-        style={{
-          borderBottom: "solid 1px",
-          paddingBottom: "1rem",
-          display: "flex",
-          justifyContent: "space-around",
-          fontSize: "16px",
-        }}
+      <Container>
+        <Group position="center">
+          <Tabs
+            variant="outline"
+            radius="md"
+            defaultValue="dashboard"
+            position="center"
+          >
+            <Tabs.List grow>
+              <Link to="" className="link">
+                <Tabs.Tab value="dashboard" icon={<IconGlobe size={14} />}>
+                  Dashboard
+                </Tabs.Tab>
+              </Link>
+              <Link to="calendar" className="link">
+                <Tabs.Tab value="calendar" icon={<IconCalendar size={14} />}>
+                  Calendar
+                </Tabs.Tab>
+              </Link>
+              <Link to="wishlist" className="link">
+                <Tabs.Tab value="wishlist" icon={<IconListDetails size={14} />}>
+                  Wishlist
+                </Tabs.Tab>
+              </Link>
+              <Link to="packinglist" className="link">
+                <Tabs.Tab value="packlist" icon={<IconBackpack size={14} />}>
+                  Packing List
+                </Tabs.Tab>
+              </Link>
+
+              <Tabs.Tab value="add-friend" icon={<IconFriends size={14} />}>
+                Add Friend
+              </Tabs.Tab>
+            </Tabs.List>
+          </Tabs>
+          <Button position="center" onClick={() => setOpened(true)}>
+            <IconMessage2 /> Discuss
+          </Button>
+        </Group>
+      </Container>
+
+      <Drawer
+        opened={opened}
+        onClose={() => setOpened(false)}
+        padding="xl"
+        size="xl"
+        position="right"
       >
-        <Link to="">Dashboard</Link>
-        {/* <Link to="calendar">Calendar</Link>
-        <Link to="wishlist">Wishlist </Link> */}
-        <Link to="packinglist">Packing List</Link>
-        {<Sidebar />} <Link to="/#">Add friend</Link>
-        <button onClick={() => navigate("/home")}>Back to Home</button>
-      </div>
+        {<Comments />}
+      </Drawer>
+
       <Outlet />
     </div>
   );

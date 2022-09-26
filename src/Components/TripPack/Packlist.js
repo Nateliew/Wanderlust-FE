@@ -27,11 +27,11 @@ import { Plus } from "tabler-icons-react";
 export default function TripPack(props) {
   //for testing
 
-  // const userId = useContext(UserContext);
-  // const { tripId } = useParams();
+  const userId = useContext(UserContext);
+  const { tripId } = useParams();
 
-  const userId = 2;
-  const tripId = 2;
+  // const userId = 2;
+  // const tripId = 2;
 
   const theme = useMantineTheme();
 
@@ -88,9 +88,11 @@ export default function TripPack(props) {
   };
 
   useEffect(() => {
-    getAllItems();
-    getInitialDataApi();
-  }, []);
+    if (userId) {
+      getAllItems();
+      getInitialDataApi();
+    }
+  }, [userId]);
 
   const reorderColumnList = (sourceCol, startIndex, endIndex) => {
     const newItemIds = Array.from(sourceCol.itemsUids);
