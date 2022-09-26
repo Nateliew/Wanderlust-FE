@@ -63,15 +63,6 @@ ol {
   width: 200px;
 }
 
-.logoutButton {
-  position: absolute;
-  top: 1;
-  right: 0;
-}
-
-.actionIcon {
-  margin: 0;
-  position: absolute;
-  top: 1;
-  left: 50%;
+.link {
+  text-decoration: none;
 }
