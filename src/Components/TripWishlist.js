@@ -68,9 +68,10 @@ export default function TripWishlist() {
     const response = await axios.delete(
       `${process.env.REACT_APP_API_SERVER}/trips/${trip_id}/wishlist/`,
       {
-        data: { place_name: id },
+        data: { placeName: id },
       }
     );
+    console.log("hello", response.data, "response", response);
     updatePlaces(response.data);
   };
 
@@ -96,7 +97,7 @@ export default function TripWishlist() {
               return (
                 <div key={index}>
                   {place.placeName}
-                  <Button onClick={(e) => deleteItem(place.place_name)}>
+                  <Button onClick={(e) => deleteItem(place.placeName)}>
                     Delete
                   </Button>
                 </div>
