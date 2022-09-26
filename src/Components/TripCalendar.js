@@ -17,6 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import CalendarCard from "./CalendarCard";
+import { useParams } from "react-router-dom";
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -33,17 +34,7 @@ const localizer = dateFnsLocalizer({
 
 const events = [];
 
-const newDraggableEvents = [
-  {
-    item: "Akihabara",
-  },
-  {
-    item: "Ueno",
-  },
-  {
-    item: "Sudobashi",
-  },
-];
+const newDraggableEvents = [{}];
 
 const adjEvents = events.map((it, ind) => ({
   ...it,
@@ -59,46 +50,40 @@ export default function TripCalendar() {
   const [counters, setCounters] = useState(newDraggableEvents);
   const [addEvent, setAddEvent] = useState();
   const [alldayCheck, setAlldayCheck] = useState(false);
-  const trip_id = 5;
+  const params = useParams();
+  const tripId = params.tripId;
+  const trip_id = params.tripId;
 
   const getWishlistItems = async () => {
-    let initialItems = await axios.get(
-      `${process.env.REACT_APP_API_SERVER}/trips/${trip_id}/wishlist`
-    );
-    console.log(initialItems.data, "initial data in get wishlist items");
+    try {
+      let initialItems = await axios.get(
+        `${process.env.REACT_APP_API_SERVER}/trips/${trip_id}/wishlist`
+      );
+      console.log(initialItems.data, "initial data in get wishlist items");
 
-    const newArray = initialItems.data.map((item, index) => {
-      return { index: index + 1, title: initialItems.data.place_name };
-    });
+      const newArray = initialItems.data.map((item, index) => {
+        return { index: index + 1, title: initialItems.data.placeName };
+      });
 
-    console.log(newArray, "new array");
-    let source = {
-      title: initialItems.data.place_name,
-      id: initialItems.data.length + 1,
-    };
-
-    setMyEvents(initialItems.data);
+      console.log(newArray, "new array");
+      let source = {
+        title: initialItems.data.placeName,
+        id: initialItems.data.length + 1,
+      };
+      console.log(initialItems.data, "inital items before second array");
+      const secondArray = [];
+      const combiningArray = newDraggableEvents.concat(initialItems.data);
+      console.log(combiningArray, "combined array");
+      setCounters(combiningArray);
+      console.log(counters, "counters in get wl data");
+    } catch (err) {
+      console.log(err, "error in get wishlsit");
+    }
   };
 
   useEffect(() => {
     getWishlistItems();
   }, []);
-
-  // const addEventToBackend = async () => {
-  //   let response = await axios.post(
-  //     `${process.env.REACT_APP_API_SERVER}/trips/${trip_id}/calendar`,
-  //     {
-  //       placeName: input,
-  //       trip_id,
-  //       wishlist_id,
-  //     }
-  //   );
-  //   console.log(response.data, "response data in handle submit");
-  // };
-
-  // // USEEFFECT when events change - will ensure any changes get pushed to backend
-  // // - axios call for get, post, delete
-  // // call axios for wishlist items to be mapped into draggable events state
 
   const eventPropGetter = useCallback(
     (event) => ({
@@ -108,10 +93,6 @@ export default function TripCalendar() {
     }),
     []
   );
-
-  const handleAddEvent = () => {
-    setMyEvents([...myEvents, newEvent()]);
-  };
 
   const handleDragStart = useCallback((event) => setDraggedEvent(event), []);
 
@@ -153,10 +134,13 @@ export default function TripCalendar() {
         console.log(newId, "newid in new event");
         const data = [
           ...prev,
-          { id: newId, trip_id: 5, place_name: event.title },
+          { id: newId, trip_id: trip_id, placeName: event.title },
         ];
         console.log(data, "prev into myevent with newid");
-        return [...prev, { id: newId, trip_id: 5, place_name: event.title }];
+        return [
+          ...prev,
+          { id: newId, trip_id: trip_id, placeName: event.title },
+        ];
       });
 
       console.log(myEvents, "my events in new event");
@@ -214,7 +198,8 @@ export default function TripCalendar() {
       setMyEvents((prev) => {
         console.log(prev, "previous state in onselectevent");
         const events = prev;
-        events.splice(3, 1);
+        const idx = events.indexOf(event);
+        events.splice(idx, 1);
         return events;
       });
     }
@@ -225,31 +210,6 @@ export default function TripCalendar() {
 
   return (
     <Fragment>
-      {/* <h2>Add New Event</h2>
-      <div>
-        <input
-          type="text"
-          placeholder="Add Title"
-          value={newEvent.title}
-          onChange={(e) => setAddEvent({ ...newEvent, e.target.value })}
-        />
-        <DatePicker
-          placeholderText="Start Date"
-          selected={newEvent.start}
-          onChange={(start) => setAddEvent({ ...newEvent, start })}
-        />
-        <DatePicker
-          placeholderText="End Date"
-          selected={newEvent.end}
-          onChange={(end) => setAddEvent({ ...newEvent, end })}
-        />
-        <input
-          type="checkbox"
-          placeholderText="Full day"
-          onChange={(allday) => setAddEvent({ ...newEvent, allday })}
-        />
-        <button onClick={handleAddEvent}>Add Event</button>
-      </div> */}
       <div>
         <label>
           <input
@@ -266,10 +226,10 @@ export default function TripCalendar() {
             <div
               draggable="true"
               key={name}
-              onDragStart={() => handleDragStart({ title: count.item })}
+              onDragStart={() => handleDragStart({ title: count.placeName })}
             >
-              {console.log(name, count, "name and count")}
-              {count.item}
+              {console.log(counters, name, count, "name and count")}
+              {count.placeName}
             </div>
           ))}
         </div>
