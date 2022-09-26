@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams, Outlet } from "react-router-dom";
 import Sidebar from "./CommentSidebar";
-import { Tabs, Drawer, Container, Button, Group } from "@mantine/core";
+import {
+  Tabs,
+  Drawer,
+  Container,
+  Button,
+  Group,
+  Modal,
+  Title,
+  Avatar,
+} from "@mantine/core";
 import {
   IconGlobe,
   IconCalendar,
@@ -12,10 +21,67 @@ import {
 } from "@tabler/icons";
 
 import Comments from "./Comments";
+import AddFriend from "./AddFriend";
+import axios from "axios";
 
 export default function TripMenu() {
   // react routes
   const [opened, setOpened] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
+  const [tripUsers, setTripUsers] = useState([]);
+  const params = useParams();
+
+  const getAllUsers = async () => {
+    try {
+      const allUsers = await axios.get(
+        `${process.env.REACT_APP_API_SERVER}/users`
+      );
+
+      setAllUsers(allUsers.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getAllUsers();
+    getTripUser();
+  }, []);
+
+  const getTripUser = async () => {
+    console.log(params.tripId);
+    try {
+      const tripUsers = await axios.get(
+        `${process.env.REACT_APP_API_SERVER}/trips/${params.tripId}/users`
+      );
+
+      setTripUsers(tripUsers.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const renderAvatar = tripUsers.map((user) => (
+    <Avatar color="cyan" radius="xl">
+      {user.userId}
+    </Avatar>
+  ));
+
+  const handleAddUser = async (userEmail) => {
+    console.log(userEmail);
+    try {
+      const tripUsers = await axios.post(
+        `${process.env.REACT_APP_API_SERVER}/trips/${params.tripId}/add-user`,
+        { userEmail: userEmail }
+      );
+      getTripUser();
+      console.log(tripUsers.data);
+      setModalOpen(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div>
@@ -49,7 +115,11 @@ export default function TripMenu() {
                 </Tabs.Tab>
               </Link>
 
-              <Tabs.Tab value="add-friend" icon={<IconFriends size={14} />}>
+              <Tabs.Tab
+                onClick={() => setModalOpen(!modalOpen)}
+                value="add-friend"
+                icon={<IconFriends size={14} />}
+              >
                 Add Friend
               </Tabs.Tab>
             </Tabs.List>
@@ -57,6 +127,10 @@ export default function TripMenu() {
           <Button position="center" onClick={() => setOpened(true)}>
             <IconMessage2 /> Discuss
           </Button>
+        </Group>
+        <Group mt="xs" position="center">
+          <Title order={3}>Travellers:</Title>
+          {tripUsers && tripUsers.length ? renderAvatar : "Loading"}
         </Group>
       </Container>
 
@@ -69,6 +143,15 @@ export default function TripMenu() {
       >
         {<Comments />}
       </Drawer>
+
+      <Modal
+        size="lg"
+        opened={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Add A Friend to Trip!"
+      >
+        <AddFriend allUsers={allUsers} handleAddUser={handleAddUser} />
+      </Modal>
 
       <Outlet />
     </div>
