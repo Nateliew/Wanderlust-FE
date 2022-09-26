@@ -12,7 +12,7 @@ const TripsList = ({ trips, handleDelete }) => {
     <div className="App">
       <div className="search">
         <Text className="searchButton">Search for your trip: </Text>
-        <TextInput
+        <input
           value={searchParams.get("filter") || ""}
           onChange={(event) => {
             let filter = event.target.value;
@@ -22,7 +22,6 @@ const TripsList = ({ trips, handleDelete }) => {
               setSearchParams({});
             }
           }}
-          className="searchInput"
         />
       </div>
       <br />

@@ -123,12 +123,6 @@ export default function PageTrip({ trip }) {
           </div>
           <Image src={source} className={classes.image} />
           {<CountryImage country={trip.country} setSource={setSource} />};
-          {/* <Image
-            src={
-              "https://3.bp.blogspot.com/-f8YEIEmX2iU/XFUltBx9roI/AAAAAAAABz0/DlgVC_hx9eEOY9pyw0S3ehCFJqh1JRbjgCKgBGAs/w0/mount-fuji-japan-nature-landscape-1-4K.jpg"
-            }
-            className={classes.image}
-          /> */}
         </div>
       </Container>
     </div>
