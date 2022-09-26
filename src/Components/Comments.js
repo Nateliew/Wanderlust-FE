@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import "../App.css";
 import axios from "axios";
 import { CommentCard } from "./CommentCard";
-import { TextInput, Button } from "@mantine/core";
+import { TextInput, button } from "@mantine/core";
 import { UserContext } from "../App";
 
 const Comments = () => {
@@ -60,12 +60,14 @@ const Comments = () => {
 
   const deleteComment = async (id) => {
     console.log(id);
-    await axios.delete(
+    let response = await axios.delete(
       `${process.env.REACT_APP_API_SERVER}/trips/${tripId}/comments/`,
       {
-        data: { commentId: id },
+        data: { commentId: id, tripId: tripId },
       }
     );
+    console.log(response.data);
+    setComments(response.data);
   };
 
   return (
@@ -80,17 +82,16 @@ const Comments = () => {
       <br />
       <label>Comments</label>
       <form onSubmit={handleSubmit}>
-        <TextInput
+        <input
           // Use textarea to give user more space to type
           as="textarea"
           name="content"
           value={commentContent}
           onChange={handleChange}
-          // onClick={(e) => handleChange(e)}
         />
-        <Button variant="primary" type="submit">
+        <button variant="primary" type="submit">
           Submit
-        </Button>
+        </button>
       </form>
     </div>
   );
