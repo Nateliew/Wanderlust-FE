@@ -30,7 +30,6 @@ export default function TripDashboard() {
 
   return (
     <div>
-      <p>Trip {Number(params.tripId)} Dashboard</p>
       <div>{<PageTrip trip={trips} />}</div>
       <Outlet />
     </div>

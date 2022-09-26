@@ -54,6 +54,7 @@ const UseStyles = createStyles((theme) => ({
     [theme.fn.smallerThan("md")]: {
       display: "none",
     },
+    borderRadius: theme.radius.xl,
   },
 
   highlight: {
@@ -123,6 +124,7 @@ export default function PageTrip({ trip }) {
           </div>
           <Image src={source} className={classes.image} />
           {<CountryImage country={trip.country} setSource={setSource} />};
+         
         </div>
       </Container>
     </div>
