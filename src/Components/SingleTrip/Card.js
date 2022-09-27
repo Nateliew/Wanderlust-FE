@@ -1,11 +1,8 @@
-import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
+import { Card, Image, Text, Button } from "@mantine/core";
 import moment from "moment";
-import React, { useState, useEffect } from "react";
-
-// import CountryImage from "./CountryImages";
+import React from "react";
 
 export default function Single({ trip, handleDelete }) {
-  const [source, setSource] = useState();
   const countryImages = {
     Japan:
       "https://images.arigatotravel.com/wp-content/uploads/2019/06/27234354/shutterstock_119011768-e1560143978361.jpg",
@@ -41,7 +38,6 @@ export default function Single({ trip, handleDelete }) {
             height={160}
             alt="Trips"
           />
-          {/* {<CountryImage country={trip.country} setSource={setSource} />} */}
         </Card.Section>
 
         <Text weight={500} size="lg" mt="md" style={{ textDecoration: "none" }}>

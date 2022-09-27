@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import { Routes, Route } from "react-router-dom";
 import TripsList from "./TripsList";
-import AddTrip from "./AddTrip";
 import { UserContext } from "../App";
 import { Button } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { Container, Box } from "@mantine/core";
+import { Container } from "@mantine/core";
 import { IconMapPins } from "@tabler/icons";
 
 function Home() {
@@ -49,15 +46,7 @@ function Home() {
         Add New Trip
       </Button>
       <br />
-      {/* <div> */}
-      {/* <Link to="/home"> */}
       <TripsList trips={trips} handleDelete={handleDelete} />
-      {/* </Link> */}
-      {/* </div>
-      <Routes>
-        <Route exact path="/add-trip" element={<AddTrip />}></Route>
-      </Routes> */}
-      {/* <Link to="/add-trip" className="addButton"> */}
     </Container>
   );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Single from "./Card";
+import Single from "./SingleTrip/Card";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { TextInput, Text } from "@mantine/core";
 import "../App.css";
@@ -51,9 +51,6 @@ const TripsList = ({ trips, handleDelete }) => {
               >
                 {<Single trip={trip} handleDelete={handleDelete} />}
               </Link>
-              {/* <button onClick={(e) => handleDelete(trip.id)} type="button">
-              Delete
-            </button>{" "} */}
             </div>
           ))}
       </div>

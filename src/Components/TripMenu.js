@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, Outlet } from "react-router-dom";
-import Sidebar from "./CommentSidebar";
 import {
   Tabs,
   Drawer,
@@ -20,7 +19,7 @@ import {
   IconFriends,
 } from "@tabler/icons";
 
-import Comments from "./Comments";
+import Comments from "./Comments/Comments";
 import AddFriend from "./AddFriend";
 import axios from "axios";
 

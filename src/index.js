@@ -10,10 +10,10 @@ import Landing from "./Components/Landing";
 import Home from "./Components/Home";
 import AddTrip from "./Components/AddTrip";
 import TripMenu from "./Components/TripMenu";
-import TripDashboard from "./Components/TripDashboard";
-import TripCalendar from "./Components/TripCalendar";
+import TripDashboard from "./Components/SingleTrip/TripDashboard";
+import TripCalendar from "./Components/Calendar/TripCalendar";
 import TripWishlist from "./Components/TripWishlist";
-import Comments from "./Components/Comments";
+import Comments from "./Components/Comments/Comments";
 import TripPack from "./Components/TripPack/Packlist";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -38,7 +38,6 @@ root.render(
             <Route path="wishlist" element={<TripWishlist />} />
             <Route path="comments" element={<Comments />} />
             <Route path="packinglist" element={<TripPack />} />
-            {/* <Route path="packlist" element={<PackList />} /> */}
           </Route>
 
           <Route path="*" element={"Nothing here!"} />

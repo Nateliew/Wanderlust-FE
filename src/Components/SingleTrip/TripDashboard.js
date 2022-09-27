@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  Link,
-  useParams,
-  useNavigate,
-  NavLink,
-  Outlet,
-} from "react-router-dom";
+import { useParams, Outlet } from "react-router-dom";
 import axios from "axios";
-import Sidebar from "./CommentSidebar";
 import PageTrip from "./Page";
 
 export default function TripDashboard() {

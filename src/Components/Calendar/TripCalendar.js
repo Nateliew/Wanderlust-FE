@@ -12,7 +12,6 @@ import getDay from "date-fns/getDay";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
@@ -34,7 +33,7 @@ const localizer = dateFnsLocalizer({
 
 const events = [];
 
-const newDraggableEvents = [{}];
+const newDraggableEvents = [];
 
 const adjEvents = events.map((it, ind) => ({
   ...it,
@@ -210,52 +209,56 @@ export default function TripCalendar() {
 
   return (
     <Fragment>
-      <div>
-        <label>
-          <input
-            type="checkbox"
-            checked={displayDragItemInCell}
-            onChange={handleDisplayDragItemInCell}
-          />
-          Display event while dragging over
-        </label>
-      </div>
-      <CalendarCard className="dndOutsideSourceExample">
-        <div className="inner">
-          {Object.entries(counters).map(([name, count]) => (
-            <div
-              draggable="true"
-              key={name}
-              onDragStart={() => handleDragStart({ title: count.placeName })}
-            >
-              {console.log(counters, name, count, "name and count")}
-              {count.placeName}
+      <div className="calendar-main-container">
+        <div className="item-list">
+          <label>
+            <input
+              type="checkbox"
+              checked={displayDragItemInCell}
+              onChange={handleDisplayDragItemInCell}
+            />
+            Display event while dragging over
+          </label>
+          <CalendarCard className="dndOutsideSourceExample">
+            <div className="inner">
+              {Object.entries(counters).map(([name, count]) => (
+                <div
+                  className="place-single"
+                  draggable="true"
+                  key={name}
+                  onDragStart={() =>
+                    handleDragStart({ title: count.placeName })
+                  }
+                >
+                  {console.log(counters, name, count, "name and count")}
+                  {count.placeName}
+                </div>
+              ))}
             </div>
-          ))}
+          </CalendarCard>
         </div>
-      </CalendarCard>
-
-      <div className="height600">
-        <DragAndDropCalendar
-          defaultDate={defaultDate}
-          dragFromOutsideItem={
-            displayDragItemInCell ? dragFromOutsideItem : null
-          }
-          draggableAccessor="isDraggable"
-          eventPropGetter={eventPropGetter}
-          events={myEvents}
-          localizer={localizer}
-          onDropFromOutside={onDropFromOutside}
-          onEventDrop={moveEvent}
-          onEventResize={resizeEvent}
-          onSelectSlot={newEvent}
-          style={{ height: 500 }}
-          onSelectEvent={(event) => onSelectEvent(event)}
-          resizable
-          selectable
-        >
-          {console.log(myEvents, "my events")}
-        </DragAndDropCalendar>
+        <div className="height600">
+          <DragAndDropCalendar
+            defaultDate={defaultDate}
+            dragFromOutsideItem={
+              displayDragItemInCell ? dragFromOutsideItem : null
+            }
+            draggableAccessor="isDraggable"
+            eventPropGetter={eventPropGetter}
+            events={myEvents}
+            localizer={localizer}
+            onDropFromOutside={onDropFromOutside}
+            onEventDrop={moveEvent}
+            onEventResize={resizeEvent}
+            onSelectSlot={newEvent}
+            style={{ height: 500 }}
+            onSelectEvent={(event) => onSelectEvent(event)}
+            resizable
+            selectable
+          >
+            {console.log(myEvents, "my events")}
+          </DragAndDropCalendar>
+        </div>
       </div>
     </Fragment>
   );
