@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Drawer, Button, Group } from "@mantine/core";
 import Comments from "./Comments";
-import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const [opened, setOpened] = useState(false);

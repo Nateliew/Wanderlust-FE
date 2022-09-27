@@ -9,8 +9,7 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { IconCheck } from "@tabler/icons";
-import moment from "moment";
-import CountryImage from "./CountryImages";
+import CountryImage from "../Image/CountryImages";
 
 const UseStyles = createStyles((theme) => ({
   inner: {
@@ -98,33 +97,18 @@ export default function PageTrip({ trip }) {
               }
             >
               <List.Item>
-                <b>Packing list</b> – Check to see if you have ...
+                <b>Packing list</b> – Click packing list to see
               </List.Item>
               <List.Item>
-                <b>Calendar</b> – Wishlists??
+                <b>Calendar</b> – Click the calendar
               </List.Item>
               <List.Item>
-                <b>Friends</b> – Text here
+                <b>Itinerary</b> – Places
               </List.Item>
             </List>
-
-            {/* <Group mt={30}>
-              <Button radius="xl" size="md" className={classes.control}>
-                Get started
-              </Button>
-              <Button
-                variant="default"
-                radius="xl"
-                size="md"
-                className={classes.control}
-              >
-                Source code
-              </Button>
-            </Group> */}
           </div>
           <Image src={source} className={classes.image} />
           {<CountryImage country={trip.country} setSource={setSource} />};
-         
         </div>
       </Container>
     </div>

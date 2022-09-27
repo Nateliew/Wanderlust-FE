@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import "../App.css";
+import "../../App.css";
 import axios from "axios";
 import { CommentCard } from "./CommentCard";
-import { TextInput, button } from "@mantine/core";
-import { UserContext } from "../App";
+import { UserContext } from "../../App";
 
 const Comments = () => {
   const [comments, setComments] = useState([]);

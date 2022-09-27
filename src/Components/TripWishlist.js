@@ -1,32 +1,14 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Link, Outlet } from "react-router-dom";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Button } from "@mantine/core";
 import axios from "axios";
 
 export default function TripWishlist() {
-  // const getListItems = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_API_SERVER}/items-catalog/by-category`
-  //     );
-
-  //     setBackendData(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const [backendData, setBackendData] = useState(dummyData)
-
   const params = useParams();
   const trip_id = params.tripId;
-  // const trip_id = 5;
 
   const [places, updatePlaces] = useState([]);
   const [input, setInput] = useState("");
-  // const [inputChange, setInputChange] = useState(false);
 
   const getWishlistItems = async () => {
     let initialItems = await axios.get(
@@ -76,35 +58,43 @@ export default function TripWishlist() {
   };
 
   return (
-    <div>
-      <p>Wishlist</p>
-      <div className="addNew-container">
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={input}
-            name="place"
-            onChange={handleChange}
-          />
-          <button variant="primary" type="submit">
-            Add Place
-          </button>
-        </form>
+    <div className="wishlist-container">
+      <div className="inner-container">
+        <div className="place-container">
+          <div className="addNew-container">
+            <form className="form-wishlist" onSubmit={handleSubmit}>
+              <input
+                className="input-form"
+                type="text"
+                value={input}
+                name="place"
+                onChange={handleChange}
+              />
+              <button className="addPlaceButton" type="submit">
+                Add Place
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <ul className="places">
+          {places && places.length > 0
+            ? places.map((place, index) => {
+                return (
+                  <div className="place-cell" key={index}>
+                    {place.placeName}
+                    <Button
+                      className="delete-button"
+                      onClick={(e) => deleteItem(place.placeName)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                );
+              })
+            : null}
+        </ul>
       </div>
-      <ul className="places">
-        {places && places.length > 0
-          ? places.map((place, index) => {
-              return (
-                <div key={index}>
-                  {place.placeName}
-                  <Button onClick={(e) => deleteItem(place.placeName)}>
-                    Delete
-                  </Button>
-                </div>
-              );
-            })
-          : null}
-      </ul>
     </div>
   );
 }
